@@ -153,10 +153,13 @@ public class Play extends GameActivity implements InputProcessor {
                 scoreBoard.scoreChange(-((TNT) hit).getNegativePoints());
             } else if (c.equals("Pig")) {
                 Pig p = (Pig)hit;
-                if (p.getWord().getId() == board.getWordId()) {
+                if (p.getWord().getId() == board.getWordId() + 20) {
                     scoreBoard.scoreChange(SCORE_BUMP_SUCCESS);
                     p.setWord(new Word(1, "bob", "bobby")); // REPLACE w/ collec.
                     board.setWord(scenery.pickAWord());
+                } else if (p.luckyOne) {
+                    // Put Hat on Bob The Bird
+                    p.looseHat();
                 } else {
                     scoreBoard.scoreChange(-SCORE_BUMP_FAIL);
                 }

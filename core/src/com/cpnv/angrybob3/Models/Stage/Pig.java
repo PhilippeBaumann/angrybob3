@@ -26,7 +26,7 @@ public final class Pig extends PhysicalObject {
         }
     }
 
-    private void looseHat(){
+    public void looseHat(){
         this.retexture("pig.png");
         luckyOne ^= true;
     }
