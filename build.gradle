@@ -19,9 +19,9 @@ buildscript {
 allprojects {
     apply plugin: "eclipse"
 
-    version = '1.0'
+    version = '0.3'
     ext {
-        appName = "angry-bob-3"
+        appName = "Angry Bob 3"
         gdxVersion = '1.9.10'
         roboVMVersion = '2.3.8'
         box2DLightsVersion = '1.4'
