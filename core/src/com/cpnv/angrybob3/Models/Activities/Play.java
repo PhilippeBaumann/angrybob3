@@ -157,7 +157,7 @@ public class Play extends GameActivity implements InputProcessor {
                     scoreBoard.scoreChange(SCORE_BUMP_SUCCESS);
                     p.setWord(new Word(1, "bob", "bobby")); // REPLACE w/ collec.
                     board.setWord(scenery.pickAWord());
-                } else if (p.luckyOne) {
+                } else if (p.getLuckyOne()) {
                     // Put Hat on Bob The Bird
                     p.looseHat();
                 } else {

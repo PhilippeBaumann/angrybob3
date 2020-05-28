@@ -8,8 +8,8 @@ import com.cpnv.angrybob3.Models.Data.Word;
 
 public final class Pig extends PhysicalObject {
 
-    public static final String  PICNAME = "pig.png";
-    public static Boolean luckyOne = false;
+    private static final String  PICNAME = "pig.png";
+    private static Boolean luckyOne = false;
 
     private static final int WIDTH = 60;
     public static final int HEIGHT = 60;
@@ -30,6 +30,10 @@ public final class Pig extends PhysicalObject {
         this.retexture("pig.png");
         luckyOne ^= true;
     }
+
+    public Boolean getLuckyOne() { return luckyOne; }
+
+
 
     public Word getWord() {
         return word;
