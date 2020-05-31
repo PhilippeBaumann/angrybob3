@@ -33,13 +33,25 @@ public final class Bubble {
      * @param duration
      */
     public Bubble(float x, float y, String message, int duration) {
+
+        // Propriety assignation
         this.message = message;
         this.timeLeft = duration;
+
+        // Sprite Changes
         sprite = new Sprite(new Texture(PICNAME));
-        sprite.setBounds(x-WIDTH/2-BUBBLE_OFFSET, y+60 - 20, WIDTH, HEIGHT);
-        font= new BitmapFont();
+        if (x <= 200){
+            sprite.flip(true, false);
+            sprite.setBounds(x, y+60 - 20, WIDTH, HEIGHT);
+        }else {
+            sprite.setBounds(x-WIDTH/2-BUBBLE_OFFSET, y+60 - 20, WIDTH, HEIGHT);
+        }
+
+        // Font Manipulation
+        font = new BitmapFont();
         font.setColor(Color.BLACK);
-        font.getData().setScale(2);
+        if (message.length() <= 12) font.getData().setScale(2f);
+        else font.getData().setScale(1.2f);
     }
 
     public void ageAway(float dt)

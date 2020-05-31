@@ -9,7 +9,7 @@ import com.cpnv.angrybob3.Models.Data.Word;
 public final class Pig extends PhysicalObject {
 
     private static final String  PICNAME = "pig.png";
-    private static Boolean luckyOne = false;
+    private Boolean luckyOne = false;
 
     private static final int WIDTH = 60;
     public static final int HEIGHT = 60;
@@ -32,7 +32,6 @@ public final class Pig extends PhysicalObject {
     }
 
     public Boolean getLuckyOne() { return luckyOne; }
-
 
 
     public Word getWord() {

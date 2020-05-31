@@ -21,6 +21,7 @@ import com.cpnv.angrybob3.Models.Stage.Wasp;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.stream.Stream;
 
 /**
  * Created by Phil & XCL
@@ -108,7 +109,7 @@ public class Play extends GameActivity implements InputProcessor {
         actions = new LinkedList<Touch>(); // User inputs are queued in here when events fire, handleInput processes them
 
         // Display Bob Message
-        babble.add(new Bubble(tweety.getPosition().x, tweety.getPosition().y, "Let's Get My Hat Back ! \nLos El Jalapenos!", 6));
+        babble.add(new Bubble(tweety.getPosition().x, tweety.getPosition().y, "Let's Get My Hat Back ! \nEl Mucho Jalapenos!", 6));
     }
 
     public void handleInput() {
@@ -158,7 +159,7 @@ public class Play extends GameActivity implements InputProcessor {
                     p.setWord(new Word(1, "bob", "bobby")); // REPLACE w/ collec.
                     board.setWord(scenery.pickAWord());
                 } else if (p.getLuckyOne()) {
-                    // Put Hat on Bob The Bird
+                    tweety.WinHat();
                     p.looseHat();
                 } else {
                     scoreBoard.scoreChange(-SCORE_BUMP_FAIL);
@@ -178,7 +179,7 @@ public class Play extends GameActivity implements InputProcessor {
         // Bird Respawn
         if (tweety.getX() > WORLD_WIDTH - Bird.WIDTH) tweety.reset();
 
-        // Bubbles
+        // Bubbles Update
         for (int i = babble.size() - 1; i >= 0; i--) {
             babble.get(i).ageAway(dt);
             if (babble.get(i).isDead()) babble.remove(i);

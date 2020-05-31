@@ -32,6 +32,10 @@ public final class Bird extends MovingObject {
         if (state == BirdState.fly) speed.y -= MovingObject.G * dt;
     }
 
+    public void WinHat(){
+        this.retexture("birdHat.png");
+    }
+
     public void reset() {
         setX(Play.TWEETY_START_X);
         setY(Play.TWEETY_START_Y);
