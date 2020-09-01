@@ -1,4 +1,7 @@
-package com.cpnv.angrybob3.Models.Activities;
+package com.cpnv.angrybob3.Activities;
+
+import com.badlogic.gdx.Gdx;
+import com.cpnv.angrybob3.AngryBob;
 
 import java.util.Stack;
 
@@ -18,7 +21,13 @@ public class GameActivityManager {
     }
 
     public void pop() {
+        //Gdx.app.log("", );
         gameActivities.pop();
+        gameActivities.pop();
+    }
+
+    public void popSingleTarget(GameActivity gameActivity){
+        gameActivities.remove(gameActivity);
     }
 
     public void handleInput() {

@@ -1,4 +1,4 @@
-package com.cpnv.angrybob3.Models.Activities;
+package com.cpnv.angrybob3.Activities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -43,7 +43,7 @@ public abstract class GameActivity {
         camera.update();
     }
 
-    protected abstract void handleInput();
+    public abstract void handleInput();
     public abstract void update(float dt);
     public abstract void render();
 }

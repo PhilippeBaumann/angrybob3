@@ -1,4 +1,4 @@
-package com.cpnv.angrybob3.Models.Activities;
+package com.cpnv.angrybob3.Activities;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;

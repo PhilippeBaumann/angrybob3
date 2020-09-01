@@ -3,7 +3,7 @@ package com.cpnv.angrybob3.Models.Stage;
 
 import com.badlogic.gdx.math.Vector2;
 import com.cpnv.angrybob3.AngryBob;
-import com.cpnv.angrybob3.Models.Activities.Play;
+import com.cpnv.angrybob3.Activities.Play;
 
 /**
  * Created by Phil & XCL

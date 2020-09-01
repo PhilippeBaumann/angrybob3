@@ -3,7 +3,7 @@ package com.cpnv.angrybob3.Models.Stage;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.cpnv.angrybob3.Models.Activities.GameActivity;
+import com.cpnv.angrybob3.Activities.GameActivity;
 import com.cpnv.angrybob3.Providers.FontProvider;
 
 /**

@@ -3,7 +3,7 @@ package com.cpnv.angrybob3.Models.Stage;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.cpnv.angrybob3.Models.Activities.GameActivity;
+import com.cpnv.angrybob3.Activities.GameActivity;
 
 /**
  * Created by Phil & XCL

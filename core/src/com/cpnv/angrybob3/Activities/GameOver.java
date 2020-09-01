@@ -1,5 +1,5 @@
-package com.cpnv.angrybob3.Models.Activities;
-
+package com.cpnv.angrybob3.Activities;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.cpnv.angrybob3.AngryBob;
@@ -24,11 +24,10 @@ public class GameOver extends GameActivity {
 
 
     @Override
-    protected void handleInput() {
+    public void handleInput() {
         if (Gdx.input.justTouched())
         {
-            AngryBob.gameActivityManager.pop(); // game over
-            AngryBob.gameActivityManager.pop(); // play
+            AngryBob.gameActivityManager.pop();
         }
     }
 

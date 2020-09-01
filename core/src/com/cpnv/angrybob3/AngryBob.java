@@ -3,11 +3,8 @@ package com.cpnv.angrybob3;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.cpnv.angrybob3.Models.Activities.GameActivityManager;
-import com.cpnv.angrybob3.Models.Activities.Welcome;
+import com.cpnv.angrybob3.Activities.GameActivityManager;
+import com.cpnv.angrybob3.Activities.Welcome;
 import com.cpnv.angrybob3.Providers.FontProvider;
 
 import java.util.Random;
@@ -29,6 +26,8 @@ public class AngryBob extends ApplicationAdapter {
 
 		random = new Random();
 		FontProvider.load();
+
+		// Display Loading Scene
 		gameActivityManager.push(new Welcome());
 	}
 

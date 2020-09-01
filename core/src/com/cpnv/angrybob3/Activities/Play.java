@@ -1,4 +1,4 @@
-package com.cpnv.angrybob3.Models.Activities;
+package com.cpnv.angrybob3.Activities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;

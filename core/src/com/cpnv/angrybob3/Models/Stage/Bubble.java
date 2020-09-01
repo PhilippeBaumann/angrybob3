@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
- * Created by Phil & XCL
+ * Created by Phil
  */
 
 public final class Bubble {
@@ -20,7 +20,7 @@ public final class Bubble {
     private static final int TEXT_OFFSET_Y = 110;
 
     private String message;
-    private float timeLeft; // life time in seconds
+    private float timeLeft; // in seconds
     private Sprite sprite;
     private BitmapFont font;
 

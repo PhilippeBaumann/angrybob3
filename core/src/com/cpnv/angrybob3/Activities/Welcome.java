@@ -1,4 +1,4 @@
-package com.cpnv.angrybob3.Models.Activities;
+package com.cpnv.angrybob3.Activities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,7 +33,7 @@ public class Welcome extends GameActivity{
     }
 
     @Override
-    protected void handleInput() {
+    public void handleInput() {
     }
 
     @Override
