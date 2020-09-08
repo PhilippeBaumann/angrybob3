@@ -57,9 +57,6 @@ public class Play extends GameActivity implements InputProcessor {
     private boolean luckyOne;
     boolean luckyOneCreated = false;
 
-    // GameOver
-    boolean isgameover;
-
     public Play() {
         super();
 
@@ -176,7 +173,8 @@ public class Play extends GameActivity implements InputProcessor {
         waspy.move(dt);
         if (tweety.collidesWith(waspy)) {
             scoreBoard.scoreChange(-100);
-            isgameover = true;
+            scoreBoard.setLifeCount(-1);
+            tweety.reset();
         }
 
         // Bird Respawn
@@ -194,12 +192,9 @@ public class Play extends GameActivity implements InputProcessor {
 
         // Scoreboard
         scoreBoard.update(dt);
-        /*
-        if (scoreBoard.gameOver())
-            AngryBob.gameActivityManager.push(new GameOver());
-        */
 
-        if (isgameover) {
+        // GameOver Controller
+        if (scoreBoard.gameOver()) {
             AngryBob.gameActivityManager.push(new GameOver());
             resetLevel();
         }
@@ -208,7 +203,6 @@ public class Play extends GameActivity implements InputProcessor {
     }
 
     private void resetLevel() {
-        isgameover = false;
         tweety.LoseHat();
         luckyOne = false;
         tweety.reset();
