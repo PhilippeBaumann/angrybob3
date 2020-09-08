@@ -57,6 +57,9 @@ public class Play extends GameActivity implements InputProcessor {
     private boolean luckyOne;
     boolean luckyOneCreated = false;
 
+    // GameOver
+    boolean isgameover;
+
     public Play() {
         super();
 
@@ -103,7 +106,7 @@ public class Play extends GameActivity implements InputProcessor {
         }
 
         board = new Board(scenery.pickAWord()); // Put one word from a pig on the board
-        scoreBoard = new ScoreBoard(70, 240);
+        scoreBoard = new ScoreBoard(0, 200, 3);
 
         Gdx.input.setInputProcessor(this);
         actions = new LinkedList<Touch>(); // User inputs are queued in here when events fire, handleInput processes them
@@ -173,7 +176,7 @@ public class Play extends GameActivity implements InputProcessor {
         waspy.move(dt);
         if (tweety.collidesWith(waspy)) {
             scoreBoard.scoreChange(-100);
-            AngryBob.gameActivityManager.push(new GameOver());
+            isgameover = true;
         }
 
         // Bird Respawn
@@ -191,11 +194,29 @@ public class Play extends GameActivity implements InputProcessor {
 
         // Scoreboard
         scoreBoard.update(dt);
+        /*
         if (scoreBoard.gameOver())
             AngryBob.gameActivityManager.push(new GameOver());
+        */
 
+        if (isgameover) {
+            AngryBob.gameActivityManager.push(new GameOver());
+            resetLevel();
+        }
 
         camera.position.lerp(posCameraDesired,0.1f);
+    }
+
+    private void resetLevel() {
+        isgameover = false;
+        tweety.LoseHat();
+        luckyOne = false;
+        tweety.reset();
+
+        // Reset Pig
+
+        // Reset Score
+        scoreBoard.reset();
     }
 
     public Vector3 posCameraDesired = new Vector3(20, 30, 0);

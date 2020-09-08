@@ -21,8 +21,6 @@ public class GameActivityManager {
     }
 
     public void pop() {
-        //Gdx.app.log("", );
-        gameActivities.pop();
         gameActivities.pop();
     }
 

@@ -36,6 +36,10 @@ public final class Bird extends MovingObject {
         this.retexture("birdHat.png");
     }
 
+    public void LoseHat(){
+        this.retexture(PICNAME);
+    }
+
     public void reset() {
         setX(Play.TWEETY_START_X);
         setY(Play.TWEETY_START_Y);
