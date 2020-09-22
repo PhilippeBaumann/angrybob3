@@ -22,4 +22,8 @@ public final class TNT extends PhysicalObject {
     public int getNegativePoints() {
         return negativePoints;
     }
+
+    public void explode(){
+
+    }
 }

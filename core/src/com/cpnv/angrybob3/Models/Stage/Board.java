@@ -39,8 +39,9 @@ public class Board {
         font.draw(batch, this.word.getValue1(), sprite.getX()+TEXT_OFFSET_X, sprite.getY()+TEXT_OFFSET_Y);
     }
 
-    public int getWordId() {
-        return word.getId();
+
+    public String getWord() {
+        return word.getValue2();
     }
 
     public void setWord(Word word) {

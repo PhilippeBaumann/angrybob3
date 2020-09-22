@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.cpnv.angrybob3.AngryBob;
+import com.cpnv.angrybob3.Models.Data.Vocabulary;
 import com.cpnv.angrybob3.Models.Data.Word;
 import com.cpnv.angrybob3.Models.Stage.Bird;
 import com.cpnv.angrybob3.Models.Stage.Board;
@@ -17,6 +18,7 @@ import com.cpnv.angrybob3.Models.Stage.Scenery;
 import com.cpnv.angrybob3.Models.Stage.ScoreBoard;
 import com.cpnv.angrybob3.Models.Stage.TNT;
 import com.cpnv.angrybob3.Models.Stage.Wasp;
+import com.cpnv.angrybob3.Providers.VocProvider;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -57,6 +59,10 @@ public class Play extends GameActivity implements InputProcessor {
     private boolean luckyOne;
     boolean luckyOneCreated = false;
 
+    // Vocabulary Feature
+    private VocProvider vocProvider = VocProvider.getInstance();
+    private Vocabulary vocabulary;
+
     public Play() {
         super();
 
@@ -70,6 +76,9 @@ public class Play extends GameActivity implements InputProcessor {
         tweety.freeze();
         rubberBand1 = new RubberBand();
         rubberBand2 = new RubberBand();
+
+        // Voc
+        vocabulary = vocProvider.pickVoc();
 
         waspy = new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20));
         scenery = new Scenery();
@@ -94,7 +103,7 @@ public class Play extends GameActivity implements InputProcessor {
                 }else {
                     luckyOne = AngryBob.random.nextBoolean();
                 }
-                scenery.addElement(new Pig(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50) , new Word(1, "bob 123", "bobbybob"), luckyOne));
+                scenery.addElement(new Pig(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50) , vocabulary.pickAWord().getValue1(), luckyOne));
                 if (luckyOne) {luckyOneCreated = true;}
 
             } catch (Exception e) {
@@ -102,7 +111,7 @@ public class Play extends GameActivity implements InputProcessor {
             }
         }
 
-        board = new Board(scenery.pickAWord()); // Put one word from a pig on the board
+        board = new Board(vocabulary.pickAWord()); // Put one word from a pig on the board
         scoreBoard = new ScoreBoard(0, 200, 3);
 
         Gdx.input.setInputProcessor(this);
@@ -125,7 +134,7 @@ public class Play extends GameActivity implements InputProcessor {
                     // Pig Clicking
                     Pig piggy = scenery.pigTouched(action.point.x, action.point.y);
                     if (piggy != null)
-                        babble.add(new Bubble(piggy.getPosition().x, piggy.getPosition().y, piggy.getWordValue(), 2));
+                        babble.add(new Bubble(piggy.getPosition().x, piggy.getPosition().y, piggy.getWord(), 2));
                     break;
                 case up:
                     if (tweety.isFrozen() && action.point.x < TWEETY_START_X && action.point.y >= FLOOR_HEIGHT && action.point.y < TWEETY_START_Y) {
@@ -154,10 +163,10 @@ public class Play extends GameActivity implements InputProcessor {
                 scoreBoard.scoreChange(-((TNT) hit).getNegativePoints());
             } else if (c.equals("Pig")) {
                 Pig p = (Pig)hit;
-                if (p.getWord().getId() == board.getWordId() + 20) {
+                if (p.getWordValue() == board.getWord()) {
                     scoreBoard.scoreChange(SCORE_BUMP_SUCCESS);
-                    p.setWord(new Word(1, "bob", "bobby")); // REPLACE w/ collec.
-                    board.setWord(scenery.pickAWord());
+                    p.setWord("bob"); // REPLACE w/ collec.
+                    board.setWord(vocabulary.pickAWord());
                 } else if (p.getLuckyOne()) {
                     tweety.WinHat();
                     p.looseHat();

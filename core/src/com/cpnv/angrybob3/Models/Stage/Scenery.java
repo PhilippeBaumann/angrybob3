@@ -71,6 +71,6 @@ public final class Scenery {
     public Word pickAWord()
     {
         //return pigs.get(AngryBob.random.nextInt(pigs.size())).getWord();
-        return new Word(1,"bob", "bob");
+        return new Word("bob", "bob");
     }
 }

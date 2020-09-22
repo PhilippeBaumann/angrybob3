@@ -14,15 +14,14 @@ public final class Pig extends PhysicalObject {
     private static final int WIDTH = 60;
     public static final int HEIGHT = 60;
 
-    private Word word;
+    private String word;
 
-    public Pig(Vector2 position, Word word, boolean luckyOne) {
+    public Pig(Vector2 position, String word, boolean luckyOne) {
         super(position, WIDTH, HEIGHT, PICNAME);
         this.luckyOne = luckyOne;
         this.word = word;
         if (this.luckyOne) {
             this.retexture("pigWithHat.png");
-            this.word = (new Word('1', "Bailando!", "Pimenton!"));
         }
     }
 
@@ -34,15 +33,15 @@ public final class Pig extends PhysicalObject {
     public Boolean getLuckyOne() { return luckyOne; }
 
 
-    public Word getWord() {
+    public String getWord() {
         return word;
     }
 
     public String getWordValue() {
-        return word.getValue2();
+        return this.word;
     }
     
-    public void setWord(Word word) {
+    public void setWord(String word) {
         this.word = word;
     }
 }
