@@ -1,7 +1,6 @@
 package com.cpnv.angrybob3.Activities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -18,12 +17,12 @@ import com.cpnv.angrybob3.Models.Stage.Scenery;
 import com.cpnv.angrybob3.Models.Stage.ScoreBoard;
 import com.cpnv.angrybob3.Models.Stage.TNT;
 import com.cpnv.angrybob3.Models.Stage.Wasp;
+import com.cpnv.angrybob3.Models.Stage.WaspQueen;
 import com.cpnv.angrybob3.Providers.VocProvider;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.stream.Stream;
 
 /**
  * Created by Phil & XCL
@@ -39,12 +38,12 @@ public class Play extends GameActivity implements InputProcessor {
     public static final int TWEETY_START_Y = FLOOR_HEIGHT + SLINGSHOT_HEIGHT - Bird.HEIGHT;
     private static final float ELASTICITY = 6f;
     private final int TNT_PENALTY = 5;
-    private final int SCORE_BUMP_SUCCESS = 7;
+    private final int SCORE_BUMP_SUCCESS = 30;
     private final int SCORE_BUMP_FAIL = 1;
 
     private Scenery scenery;
     private Bird tweety;
-    private Wasp waspy;
+    private ArrayList<Wasp> waspies = new ArrayList<Wasp>();
     private ArrayList<Bubble> babble;
     private Texture background;
     private Texture slingshot1;
@@ -62,6 +61,7 @@ public class Play extends GameActivity implements InputProcessor {
     // Vocabulary Feature
     private VocProvider vocProvider = VocProvider.getInstance();
     private Vocabulary vocabulary;
+    private Word newWord;
 
     public Play() {
         super();
@@ -79,8 +79,19 @@ public class Play extends GameActivity implements InputProcessor {
 
         // Voc
         vocabulary = vocProvider.pickVoc();
+        newWord = vocabulary.pickAWord();
 
-        waspy = new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20));
+        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        waspies.add(new WaspQueen(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
         scenery = new Scenery();
         for (int i = 5; i < WORLD_WIDTH / 50; i++) {
             try {
@@ -103,15 +114,21 @@ public class Play extends GameActivity implements InputProcessor {
                 }else {
                     luckyOne = AngryBob.random.nextBoolean();
                 }
-                scenery.addElement(new Pig(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50) , vocabulary.pickAWord().getValue1(), luckyOne));
-                if (luckyOne) {luckyOneCreated = true;}
+
+                // Pig Word bearer
+                if (luckyOne) {
+                    scenery.addElement(new Pig(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50) , newWord.getValue1(), luckyOne));
+                    luckyOneCreated = true;
+                }else{
+                    scenery.addElement(new Pig(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50) , vocabulary.pickAWord().getValue1(), luckyOne));
+                }
 
             } catch (Exception e) {
                 Gdx.app.log("ANGRY_BOB", "Could not add Pig to scene" + e);
             }
         }
 
-        board = new Board(vocabulary.pickAWord()); // Put one word from a pig on the board
+        board = new Board(newWord); // Put one word from a pig on the board
         scoreBoard = new ScoreBoard(0, 200, 3);
 
         Gdx.input.setInputProcessor(this);
@@ -153,9 +170,11 @@ public class Play extends GameActivity implements InputProcessor {
     }
 
     public void update(float dt) {
-        //  Bird
+        //  Bird Movement Updater
         tweety.accelerate(dt);
         tweety.move(dt);
+
+        // Custom Collision System
         PhysicalObject hit = scenery.collidesWith(tweety);
         if (hit != null) {
             String c = hit.getClass().getSimpleName();
@@ -165,8 +184,10 @@ public class Play extends GameActivity implements InputProcessor {
                 Pig p = (Pig)hit;
                 if (p.getWordValue() == board.getWord()) {
                     scoreBoard.scoreChange(SCORE_BUMP_SUCCESS);
-                    p.setWord("bob"); // REPLACE w/ collec.
-                    board.setWord(vocabulary.pickAWord());
+                    scoreBoard.setLifeCount(+1);
+                    newWord = vocabulary.pickAWord();
+                    board.setWord(newWord);
+                    resetLevel();
                 } else if (p.getLuckyOne()) {
                     tweety.WinHat();
                     p.looseHat();
@@ -178,12 +199,15 @@ public class Play extends GameActivity implements InputProcessor {
         }
 
         // Wasp
-        waspy.accelerate(dt);
-        waspy.move(dt);
-        if (tweety.collidesWith(waspy)) {
-            scoreBoard.scoreChange(-100);
-            scoreBoard.setLifeCount(-1);
-            tweety.reset();
+        for (Wasp wasp : waspies){
+            wasp.accelerate(dt);
+            wasp.move(dt);
+
+            if (tweety.collidesWith(wasp)) {
+                scoreBoard.scoreChange(-100);
+                scoreBoard.setLifeCount(-1);
+                tweety.reset();
+            }
         }
 
         // Bird Respawn
@@ -239,7 +263,9 @@ public class Play extends GameActivity implements InputProcessor {
         tweety.draw(spriteBatch);
         if (tweety.isFrozen())
             rubberBand2.draw(spriteBatch);
-        waspy.draw(spriteBatch);
+        for (Wasp wasp : waspies){
+            wasp.draw(spriteBatch);
+        }
         scenery.draw(spriteBatch);
         spriteBatch.draw(slingshot2, SLINGSHOT_OFFSET, FLOOR_HEIGHT, SLINGSHOT_WIDTH, SLINGSHOT_HEIGHT);
         spriteBatch.end();

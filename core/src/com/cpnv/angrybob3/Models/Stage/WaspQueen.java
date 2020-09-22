@@ -2,27 +2,22 @@ package com.cpnv.angrybob3.Models.Stage;
 
 
 import com.badlogic.gdx.math.Vector2;
-import com.cpnv.angrybob3.AngryBob;
 import com.cpnv.angrybob3.Activities.Play;
+import com.cpnv.angrybob3.AngryBob;
 
 /**
  * Created by Phil & XCL
  */
 
-public class Wasp extends MovingObject {
+public final class WaspQueen extends Wasp {
 
     private static final int AGITATION = 15; // How sharply speed changes
-
     private static final String PICNAME = "wasp.png";
-    private static final int WIDTH = 60;
-    private static final int HEIGHT = 60;
+    private static final int WIDTH = 180;
+    private static final int HEIGHT = 180;
 
-    public Wasp(Vector2 position, Vector2 speed) {
+    public WaspQueen(Vector2 position, Vector2 speed) {
         super(position, WIDTH, HEIGHT, PICNAME, speed);
-    }
-
-    public Wasp(Vector2 position, float width, float height, String picname, Vector2 speed){
-        super(position, width, height, picname, speed);
     }
 
     @Override
@@ -31,4 +26,5 @@ public class Wasp extends MovingObject {
         speed.x += (AngryBob.random.nextFloat()-getX()/ (Play.WORLD_WIDTH - 30))*AGITATION; // the closer it is to a border, the higher the chances that acceleration goes the other way
         speed.y += (AngryBob.random.nextFloat()-getY()/ Play.WORLD_HEIGHT)*AGITATION;
     }
+
 }

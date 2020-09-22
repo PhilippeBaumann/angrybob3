@@ -36,12 +36,12 @@ public class Board {
     public void draw(Batch batch)
     {
         sprite.draw(batch);
-        font.draw(batch, this.word.getValue1(), sprite.getX()+TEXT_OFFSET_X, sprite.getY()+TEXT_OFFSET_Y);
+        font.draw(batch, this.word.getValue2(), sprite.getX()+TEXT_OFFSET_X, sprite.getY()+TEXT_OFFSET_Y);
     }
 
 
     public String getWord() {
-        return word.getValue2();
+        return word.getValue1();
     }
 
     public void setWord(Word word) {
