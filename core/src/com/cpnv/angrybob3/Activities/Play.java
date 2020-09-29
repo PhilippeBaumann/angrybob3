@@ -81,52 +81,14 @@ public class Play extends GameActivity implements InputProcessor {
         vocabulary = vocProvider.pickVoc();
         newWord = vocabulary.pickAWord();
 
-        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        waspies.add(new WaspQueen(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+
+
+        // Level Generation
         scenery = new Scenery();
-        for (int i = 5; i < WORLD_WIDTH / 50; i++) {
-            try {
-                scenery.addElement(new PhysicalObject(new Vector2(i * 50, FLOOR_HEIGHT), 50, 50, "block.png"));
-            } catch (Exception e) {
-                Gdx.app.log("ANGRY_BOB", "Could not add Wood Box to scene");
-            }
-        }
-        for (int i = 0; i < 2; i++) {
-            try {
-                scenery.addElement(new TNT(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50), TNT_PENALTY));
-            } catch (Exception e) {
-                Gdx.app.log("ANGRY_BOB", "Could not add TNT Barrel to scene");
-            }
-        }
-        for (int i = 0; i < 8; i++) {
-            try {
-                if (luckyOneCreated){
-                    luckyOne = false;
-                }else {
-                    luckyOne = AngryBob.random.nextBoolean();
-                }
+        generateLevel();
 
-                // Pig Word bearer
-                if (luckyOne) {
-                    scenery.addElement(new Pig(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50) , newWord.getValue1(), luckyOne));
-                    luckyOneCreated = true;
-                }else{
-                    scenery.addElement(new Pig(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50) , vocabulary.pickAWord().getValue1(), luckyOne));
-                }
-
-            } catch (Exception e) {
-                Gdx.app.log("ANGRY_BOB", "Could not add Pig to scene" + e);
-            }
-        }
+        // Wasp Factory
+        waspFactory(0, 0);
 
         board = new Board(newWord); // Put one word from a pig on the board
         scoreBoard = new ScoreBoard(0, 200, 3);
@@ -136,6 +98,50 @@ public class Play extends GameActivity implements InputProcessor {
 
         // Display Bob Message
         babble.add(new Bubble(tweety.getPosition().x, tweety.getPosition().y, "Let's Get My Hat Back ! \nEl Mucho Jalapenos!", 6));
+    }
+
+    private void generateLevel() {
+
+        scenery.clear();
+
+        for (int i = 5; i < WORLD_WIDTH / 50; i++) {
+            try {
+                scenery.addElement(new PhysicalObject(new Vector2(i * 50, FLOOR_HEIGHT), 50, 50, "block.png"));
+            } catch (Exception e) {
+                Gdx.app.log("Level Generation", "Could not add Wood Box to scene");
+            }
+        }
+
+        for (int i = 0; i < 2; i++) {
+            try {
+                scenery.addElement(new TNT(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50), TNT_PENALTY));
+            } catch (Exception e) {
+                Gdx.app.log("Level Generation", "Could not add TNT Barrel to scene");
+            }
+        }
+
+        for (int i = 0; i < 8; i++) {
+            try {
+                if (luckyOneCreated){
+                    luckyOne = false;
+                }else {
+                    luckyOne = AngryBob.random.nextBoolean();
+                }
+
+                // Pig Word Generator
+                if (luckyOne) {
+                    scenery.addElement(new Pig(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50) , newWord.getValue1(), luckyOne));
+                    luckyOneCreated = true;
+                }else{
+                    scenery.addElement(new Pig(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50) , vocabulary.pickAWord().getValue1(), luckyOne));
+                }
+
+            } catch (Exception e) {
+                Gdx.app.log("Angry Bob Level", "Could not add Pig to scene" + e);
+            }
+        }
+
+        luckyOneCreated = false;
     }
 
     public void handleInput() {
@@ -185,12 +191,8 @@ public class Play extends GameActivity implements InputProcessor {
                 if (p.getWordValue() == board.getWord()) {
                     scoreBoard.scoreChange(SCORE_BUMP_SUCCESS);
                     scoreBoard.setLifeCount(+1);
-                    newWord = vocabulary.pickAWord();
-                    board.setWord(newWord);
-                    resetLevel();
-                } else if (p.getLuckyOne()) {
-                    tweety.WinHat();
                     p.looseHat();
+                    resetLevel(false);
                 } else {
                     scoreBoard.scoreChange(-SCORE_BUMP_FAIL);
                 }
@@ -203,7 +205,7 @@ public class Play extends GameActivity implements InputProcessor {
             wasp.accelerate(dt);
             wasp.move(dt);
 
-            if (tweety.collidesWith(wasp)) {
+            if (tweety.collidesWith(wasp) && !tweety.isFrozen()) {
                 scoreBoard.scoreChange(-100);
                 scoreBoard.setLifeCount(-1);
                 tweety.reset();
@@ -229,21 +231,30 @@ public class Play extends GameActivity implements InputProcessor {
         // GameOver Controller
         if (scoreBoard.gameOver()) {
             AngryBob.gameActivityManager.push(new GameOver());
-            resetLevel();
+            resetLevel(true);
         }
 
         camera.position.lerp(posCameraDesired,0.1f);
     }
 
-    private void resetLevel() {
-        tweety.LoseHat();
-        luckyOne = false;
-        tweety.reset();
+    private void resetLevel(boolean gameover) {
 
-        // Reset Pig
+        // Reset Pig and TNTs , maybe Wasp position
 
-        // Reset Score
-        scoreBoard.reset();
+        // Voc Handler
+        newWord = vocabulary.pickAWord();
+        board.setWord(newWord);
+
+        if (gameover){
+            scoreBoard.reset(); // Reset Score
+        }
+
+        generateLevel();
+
+        //luckyOne = false;
+
+        // Optional Hat handling
+        //tweety.LoseHat();
     }
 
     public Vector3 posCameraDesired = new Vector3(20, 30, 0);
@@ -316,5 +327,16 @@ public class Play extends GameActivity implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    // Generators
+
+    private void waspFactory(int wasps, int waspQueens){
+        for ( int waspAmount = 0; waspAmount < wasps ; waspAmount++) {
+            waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        }
+        for ( int waspAmount = 0; waspAmount < waspQueens ; waspAmount++) {
+            waspies.add(new WaspQueen(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
+        }
     }
 }

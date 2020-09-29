@@ -73,4 +73,9 @@ public final class Scenery {
         //return pigs.get(AngryBob.random.nextInt(pigs.size())).getWord();
         return new Word("bob", "bob");
     }
+
+    public void clear(){
+        scene.clear();
+        pigs.clear();
+    }
 }
