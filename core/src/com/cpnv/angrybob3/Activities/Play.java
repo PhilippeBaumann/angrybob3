@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.cpnv.angrybob3.AngryBob;
 import com.cpnv.angrybob3.Models.Data.Vocabulary;
 import com.cpnv.angrybob3.Models.Data.Word;
@@ -157,7 +158,29 @@ public class Play extends GameActivity implements InputProcessor {
                 }
             }
         } else{
+            // House
+            Array<String> house = new Array<>();
+            house.add("XXXXXXXXXXX");
+            house.add("X---------X");
+            house.add("X---------X");
+            house.add("X---------X");
+            house.add("X---------X");
+            house.add("X---------X");
+            house.add("X---------X");
+            house.add("X---------X");
+            house.add("X---------X");
+            house.add("XXXXXXXXXXX");
+            house.reverse();
 
+            for (int y = 0; y < 10; y++) {
+                for(int x= 0; x < house.get(y).length(); x++)
+                try {
+                    if (String.valueOf(house.get(y).charAt(x)).equals("X"))
+                        scenery.addElement(new PhysicalObject(new Vector2(600 + x * 50, 50*y + FLOOR_HEIGHT), 50, 50, "block.png"));
+                } catch (Exception e) {
+                    Gdx.app.log("Level Generation", "Could not add Wood Box to scene");
+                }
+            }
         }
 
         // Lucky pig reset
