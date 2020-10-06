@@ -19,6 +19,7 @@ import com.cpnv.angrybob3.Models.Stage.TNT;
 import com.cpnv.angrybob3.Models.Stage.Wasp;
 import com.cpnv.angrybob3.Models.Stage.WaspQueen;
 import com.cpnv.angrybob3.Providers.VocProvider;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -81,11 +82,9 @@ public class Play extends GameActivity implements InputProcessor {
         vocabulary = vocProvider.pickVoc();
         newWord = vocabulary.pickAWord();
 
-
-
         // Level Generation
         scenery = new Scenery();
-        generateLevel();
+        generateLevel(true);
 
         // Wasp Factory
         waspFactory(0, 0);
@@ -100,48 +99,74 @@ public class Play extends GameActivity implements InputProcessor {
         babble.add(new Bubble(tweety.getPosition().x, tweety.getPosition().y, "Let's Get My Hat Back ! \nEl Mucho Jalapenos!", 6));
     }
 
-    private void generateLevel() {
+    private void generateLevel(boolean procedural) {
 
+        // Scene clearing (first time nothing to clear = almost no impact)
         scenery.clear();
 
-        for (int i = 5; i < WORLD_WIDTH / 50; i++) {
-            try {
-                scenery.addElement(new PhysicalObject(new Vector2(i * 50, FLOOR_HEIGHT), 50, 50, "block.png"));
-            } catch (Exception e) {
-                Gdx.app.log("Level Generation", "Could not add Wood Box to scene");
-            }
-        }
-
-        for (int i = 0; i < 2; i++) {
-            try {
-                scenery.addElement(new TNT(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50), TNT_PENALTY));
-            } catch (Exception e) {
-                Gdx.app.log("Level Generation", "Could not add TNT Barrel to scene");
-            }
-        }
-
-        for (int i = 0; i < 8; i++) {
-            try {
-                if (luckyOneCreated){
-                    luckyOne = false;
-                }else {
-                    luckyOne = AngryBob.random.nextBoolean();
+        // Determine if the world if procedurally generated or using pre-made structures.
+        if (procedural){
+            // Wood Carpet Generation
+            for (int i = 5; i < WORLD_WIDTH / 50; i++) {
+                try {
+                    scenery.addElement(new PhysicalObject(new Vector2(i * 50, FLOOR_HEIGHT), 50, 50, "block.png"));
+                } catch (Exception e) {
+                    Gdx.app.log("Level Generation", "Could not add Wood Box to scene");
                 }
-
-                // Pig Word Generator
-                if (luckyOne) {
-                    scenery.addElement(new Pig(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50) , newWord.getValue1(), luckyOne));
-                    luckyOneCreated = true;
-                }else{
-                    scenery.addElement(new Pig(new Vector2(AngryBob.random.nextInt(WORLD_WIDTH * 2 / 3) + WORLD_WIDTH / 3, FLOOR_HEIGHT + 50) , vocabulary.pickAWord().getValue1(), luckyOne));
-                }
-
-            } catch (Exception e) {
-                Gdx.app.log("Angry Bob Level", "Could not add Pig to scene" + e);
             }
+
+            // TNT Crates Generation
+            for (int i = 0; i < 2; i++) {
+                try {
+                    int x = getRandomCoordinate();
+                    // Debugging to get an idea of proportion / placement
+                    Gdx.app.log("Level Generation", "X of TNT : "+ x);
+                    // Add the TNT to the scene, if it is not possible the creation isn't forced
+                    scenery.addElement(new TNT(new Vector2(x, FLOOR_HEIGHT + 50), TNT_PENALTY));
+                } catch (Exception e) {
+                    Gdx.app.log("Level Generation", "Could not add TNT Barrel to scene");
+                }
+            }
+
+            // Pig Generation
+            for (int i = 0; i < 8; i++) {
+                try {
+
+                    // Lucky (Word bearer) Handling
+                    if (luckyOneCreated){
+                        luckyOne = false;
+                    } else {
+                        luckyOne = AngryBob.random.nextBoolean();
+                    }
+
+                    if (luckyOne) {
+                        // Try placing the lucky pig, if not placed try to find a spot until it works
+                        while (!luckyOneCreated){
+                            try{
+                                scenery.addElement(new Pig(new Vector2(getRandomCoordinate(), FLOOR_HEIGHT + 50) , newWord.getValue1(), luckyOne));
+                                luckyOneCreated = true;
+                            } catch(Exception e){
+                                Gdx.app.log("Angry Bob Level", "Could not add lucky Pig to scene" + e);
+                            }
+                        }
+                    } else{
+                        scenery.addElement(new Pig(new Vector2(getRandomCoordinate(), FLOOR_HEIGHT + 50) , vocabulary.pickAWord().getValue1(), luckyOne));
+                    }
+                } catch (Exception e) {
+                    Gdx.app.log("Angry Bob Level", "Could not add Pig to scene" + e);
+                }
+            }
+        } else{
+
         }
 
+        // Lucky pig reset
         luckyOneCreated = false;
+    }
+
+    // Generate a random number (x coordinate) and place the output between 300 and 1500 (WORLD_WIDTH)
+    public int getRandomCoordinate(){
+        return AngryBob.random.nextInt(WORLD_WIDTH - WORLD_WIDTH / 5) + WORLD_WIDTH / 6;
     }
 
     public void handleInput() {
@@ -191,6 +216,7 @@ public class Play extends GameActivity implements InputProcessor {
                 if (p.getWordValue() == board.getWord()) {
                     scoreBoard.scoreChange(SCORE_BUMP_SUCCESS);
                     scoreBoard.setLifeCount(+1);
+                    scoreBoard.timerChange(+30);
                     p.looseHat();
                     resetLevel(false);
                 } else {
@@ -249,7 +275,7 @@ public class Play extends GameActivity implements InputProcessor {
             scoreBoard.reset(); // Reset Score
         }
 
-        generateLevel();
+        generateLevel(true);
 
         //luckyOne = false;
 

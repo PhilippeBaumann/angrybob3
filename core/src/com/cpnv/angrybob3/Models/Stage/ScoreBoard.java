@@ -52,6 +52,10 @@ public class ScoreBoard {
         lifeCount += value;
     }
 
+    public void timerChange(int value) {
+        countdown += value;
+    }
+
     public void draw(Batch batch) {
         font.draw(batch, "Score: "+ this.score, GameActivity.WORLD_WIDTH-BOARD_WIDTH, GameActivity.WORLD_HEIGHT-LINE_HEIGHT);
         font.draw(batch, "Time remaining: " +(int)this.countdown, GameActivity.WORLD_WIDTH-BOARD_WIDTH, GameActivity.WORLD_HEIGHT-LINE_HEIGHT * 2);
