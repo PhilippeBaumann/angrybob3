@@ -10,7 +10,7 @@ import com.cpnv.angrybob3.Models.Stage.Title;
  * Created by Phil
  */
 
-public class Loading extends GameActivity{
+public class MenuSelector extends GameActivity{
     private Texture background;
     private Title title;
     private float splashTime = 3;
@@ -19,11 +19,11 @@ public class Loading extends GameActivity{
     private boolean direction = true;
     private boolean direction_bob = true;
 
-    public Loading()
+    public MenuSelector()
     {
         super();
         background = new Texture(Gdx.files.internal("background.png"));
-        title = new Title("Loading...");
+        title = new Title("LOADING", WORLD_HEIGHT);
         hat = new Sprite(new Texture("loadingHat.png"));
         bob = new Sprite(new Texture("bird.png"));
         hat.setBounds(camera.viewportWidth/2 - 50, camera.viewportHeight/5,100,100);
@@ -69,7 +69,18 @@ public class Loading extends GameActivity{
         if (splashTime > 0)
             splashTime -= dt;
         else
-            AngryBob.gameActivityManager.push(new Play());
+            launchScene("play");
+
+        // To go to the settings
+        AngryBob.gameActivityManager.push(new GameOver());
+
+        // To Close Game
+        Gdx.app.exit();
+    }
+
+    private void launchScene(String scene){
+        // Settings X
+        AngryBob.gameActivityManager.push(new Play(/* With settings*/));
     }
 
     @Override

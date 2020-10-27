@@ -19,7 +19,7 @@ public class GameOver extends GameActivity {
     {
         super();
         background = new Texture(Gdx.files.internal("background.png"));
-        title = new Title("Game Over\n score: "+ ScoreBoard.score);
+        title = new Title("Game Over\n score: "+ ScoreBoard.score, 720);
     }
 
 

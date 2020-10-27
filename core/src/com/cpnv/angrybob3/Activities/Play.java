@@ -85,10 +85,10 @@ public class Play extends GameActivity implements InputProcessor {
 
         // Level Generation
         scenery = new Scenery();
-        generateLevel(true);
+        generateLevel(false);
 
         // Wasp Factory
-        waspFactory(0, 0);
+        waspFactory(2, 1);
 
         board = new Board(newWord); // Put one word from a pig on the board
         scoreBoard = new ScoreBoard(0, 200, 3);
@@ -160,16 +160,16 @@ public class Play extends GameActivity implements InputProcessor {
         } else{
             // House
             Array<String> house = new Array<>();
-            house.add("XXXXXXXXXXX");
-            house.add("X---------X");
-            house.add("X---------X");
-            house.add("X---------X");
-            house.add("X---------X");
-            house.add("X---------X");
-            house.add("X---------X");
-            house.add("X---------X");
-            house.add("X---------X");
-            house.add("XXXXXXXXXXX");
+            house.add("-----X-----");
+            house.add("----XXX----");
+            house.add("----XXX----");
+            house.add("----XXX----");
+            house.add("----XXX----");
+            house.add("----XXX----");
+            house.add("----XXX----");
+            house.add("---XX-XX---");
+            house.add("--XX---XX--");
+            house.add("-XX-----XX-");
             house.reverse();
 
             for (int y = 0; y < 10; y++) {

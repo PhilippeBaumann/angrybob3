@@ -17,10 +17,11 @@ public final class Title {
     private float x;
     private float y;
 
-    public Title(String message) {
+    public Title(String message, int height) {
         initBase(message);
         x = (GameActivity.WORLD_WIDTH-layout.width)/2;
-        y = (GameActivity.WORLD_HEIGHT+(layout.height*2))/2;
+        y = height;
+        //y = (GameActivity.WORLD_HEIGHT+(layout.height*2))/2;
     }
 
     public Title(String message, float px, float py) {

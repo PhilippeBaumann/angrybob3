@@ -23,7 +23,7 @@ public class Welcome extends GameActivity{
     {
         super();
         background = new Texture(Gdx.files.internal("background.png"));
-        title = new Title("Angry Bob 3");
+        title = new Title("Angry Bob 3", 600);
         hat = new Sprite(new Texture("loadingHat.png"));
         bob = new Sprite(new Texture("bird.png"));
         hat.setBounds(camera.viewportWidth/2 - 50, camera.viewportHeight/5,100,100);
@@ -69,7 +69,7 @@ public class Welcome extends GameActivity{
         if (splashTime > 0)
             splashTime -= dt;
         else
-            AngryBob.gameActivityManager.push(new Play());
+            AngryBob.gameActivityManager.push(new MenuSelector());
     }
 
     @Override
