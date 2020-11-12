@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.cpnv.angrybob3.AngryBob;
 import com.cpnv.angrybob3.Model.Data.Vocabulary;
 import com.cpnv.angrybob3.Model.Data.Word;
-import com.cpnv.angrybob3.ui.IconButton;
+import com.cpnv.angrybob3.ui.Button;
 
 public class VocDetail extends BaseActivity implements InputProcessor {
     private static final int TITLE_SIZE = 6;
@@ -35,7 +35,7 @@ public class VocDetail extends BaseActivity implements InputProcessor {
     private float vocStartY;
     private float wordHeight;
 
-    private IconButton returnButton;
+    private Button returnButton;
 
     public VocDetail(Vocabulary voc) {
         this.voc = voc;
@@ -53,11 +53,12 @@ public class VocDetail extends BaseActivity implements InputProcessor {
         wordFont.setColor(Color.BLACK);
         wordFont.getData().setScale(WORD_SIZE);
 
-        returnButton = new IconButton(
+        returnButton = new Button(
                 new Vector2(Play.WORLD_WIDTH - BUTTON_DIMENSION - 10f,
                         Play.WORLD_HEIGHT - BUTTON_DIMENSION - 10f),
                 BUTTON_DIMENSION, BUTTON_DIMENSION,
-                "pig.png"
+                "pig.png",
+                "Back"
         );
 
         GlyphLayout vocGlyphLayout = new GlyphLayout();
@@ -88,7 +89,7 @@ public class VocDetail extends BaseActivity implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 touchPoint = convertCoordinates(screenX, screenY);
-        if (returnButton.contains(touchPoint)) {
+        if (returnButton.isTouched(touchPoint)) {
             AngryBob.popPage();
         }
         previousTouchPoint = touchPoint;

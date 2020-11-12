@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.cpnv.angrybob3.AngryBob;
 
 public class Welcome extends BaseActivity {
-    private static final String TITLE = "AngryBob";
+    private static final String TITLE = "Angry Wirds";
     private static final int TITLE_SCALE = 6;
 
     private BitmapFont titleFont;

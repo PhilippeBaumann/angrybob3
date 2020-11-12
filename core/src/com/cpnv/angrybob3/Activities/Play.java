@@ -25,7 +25,7 @@ import com.cpnv.angrybob3.Model.Tnt;
 import com.cpnv.angrybob3.Model.Wasp;
 import com.cpnv.angrybob3.Model.Data.NoPickableWordException;
 import com.cpnv.angrybob3.Model.Data.Word;
-import com.cpnv.angrybob3.ui.IconButton;
+import com.cpnv.angrybob3.ui.Button;
 
 public class Play extends BaseActivity implements InputProcessor {
     public static final int FLOOR_HEIGHT = 120;
@@ -74,7 +74,7 @@ public class Play extends BaseActivity implements InputProcessor {
 
     private BitmapFont infoFont;
 
-    private IconButton pauseButton;
+    private Button pauseButton;
 
     private Panel questionPanel;
 
@@ -165,10 +165,11 @@ public class Play extends BaseActivity implements InputProcessor {
             }
         }
 
-        pauseButton = new IconButton(
+        pauseButton = new Button(
                 new Vector2(PAUSE_BUTTON_X, PAUSE_BUTTON_Y),
                 PAUSE_BUTTON_DIMENSIONS, PAUSE_BUTTON_DIMENSIONS,
-                "block.png"
+                "block.png",
+                "Pause"
         );
 
         slingshot1 = new Texture(Gdx.files.internal("slingshot.png"));
@@ -305,7 +306,7 @@ public class Play extends BaseActivity implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 touchPoint = convertCoordinates(screenX, screenY);
 
-        if (pauseButton.contains(touchPoint)) {
+        if (pauseButton.isTouched(touchPoint)) {
             AngryBob.pushPage(new Pause());
             return true;
         }
