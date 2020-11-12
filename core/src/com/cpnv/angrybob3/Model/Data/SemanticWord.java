@@ -1,5 +1,6 @@
 package com.cpnv.angrybob3.Model.Data;
 
+import  com.cpnv.angrybob3.Model.Data.TranslationDoesNotExistException;
 import java.util.HashMap;
 
 public class SemanticWord {
@@ -22,17 +23,17 @@ public class SemanticWord {
         values.put(language, value);
     }
 
-    public String getValue(String language){
+    public String getValue(String language) /* throws TranslationDoesNotExistException */{
         return values.get(language);
     }
 
     // Get the Word associated with the Base (Known Word)
-    public String getQuestion(String languageFrom) {
+    public String getQuestion(String languageFrom) /* throws TranslationDoesNotExistException */ {
         return getValue(languageFrom);
     }
 
     // Get the Word associated with the training (To learn Word)
-    public String getSolution(String languageTo) {
+    public String getSolution(String languageTo) /* throws TranslationDoesNotExistException */{
         return getValue(languageTo);
     }
 
