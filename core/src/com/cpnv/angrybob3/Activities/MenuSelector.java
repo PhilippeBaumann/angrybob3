@@ -71,11 +71,11 @@ public class MenuSelector extends GameActivity{
         else
             launchScene("play");
 
-        // To go to the settings
+        /* To go to the settings
         AngryBob.gameActivityManager.push(new GameOver());
 
         // To Close Game
-        Gdx.app.exit();
+        Gdx.app.exit(); */
     }
 
     private void launchScene(String scene){
