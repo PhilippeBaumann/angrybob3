@@ -12,10 +12,8 @@ public class SemanticWord {
 
     private HashMap<String, String> values;
 
-    public SemanticWord(String solution, String question) {
+    public SemanticWord() {
         values = new HashMap<>();
-        this.question = question;
-        this.solution = solution;
         allocated = false;
         found = false;
     }
@@ -28,12 +26,14 @@ public class SemanticWord {
         return values.get(language);
     }
 
-    public String getQuestion() {
-        return question;
+    // Get the Word associated with the Base (Known Word)
+    public String getQuestion(String languageFrom) {
+        return getValue(languageFrom);
     }
 
-    public String getSolution() {
-        return solution;
+    // Get the Word associated with the training (To learn Word)
+    public String getSolution(String languageTo) {
+        return getValue(languageTo);
     }
 
     public boolean isAllocated() {

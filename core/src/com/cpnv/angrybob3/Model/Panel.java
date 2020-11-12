@@ -26,11 +26,15 @@ public class Panel extends Sprite {
 
     private BitmapFont font;
     private SemanticWord word;
+    private String languageFrom;
 
-    public Panel(SemanticWord word) {
+    // Panel always shows the Known language (languageFrom)
+
+    public Panel(SemanticWord word, String languageFrom) {
         super(new Texture(PICTURE_NAME));
         setBounds(POSITION_X, POSITION_Y, WIDTH, HEIGHT);
         this.word = word;
+        this.languageFrom = languageFrom;
         font = new BitmapFont();
         font.setColor(Color.BLACK);
         font.getData().setScale(FONT_SCALE);
@@ -39,7 +43,7 @@ public class Panel extends Sprite {
     @Override
     public void draw(Batch batch) {
         super.draw(batch);
-        font.draw(batch, word.getQuestion(), getX() + TEXT_OFFSET_X, getY() + TEXT_OFFSET_Y);
+        font.draw(batch, word.getQuestion( this.languageFrom), getX() + TEXT_OFFSET_X, getY() + TEXT_OFFSET_Y);
     }
 
     public SemanticWord getWord() {

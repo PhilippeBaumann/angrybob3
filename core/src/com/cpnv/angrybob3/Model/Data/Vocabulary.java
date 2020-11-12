@@ -10,6 +10,26 @@ public class Vocabulary {
     private String vocName;
     private ArrayList<SemanticWord> words;
 
+    // By assessing the Voc we can see which languages are in use
+    private String languageFrom;
+    private String languageTo;
+
+    public String getLanguageFrom() {
+        return languageFrom;
+    }
+
+    public void setLanguageFrom(String languageFrom) {
+        this.languageFrom = languageFrom;
+    }
+
+    public String getLanguageTo() {
+        return languageTo;
+    }
+
+    public void setLanguageTo(String languageTo) {
+        this.languageTo = languageTo;
+    }
+
     public Vocabulary(String vocName) {
         this.vocName = vocName;
         words = new ArrayList<>();
@@ -27,7 +47,14 @@ public class Vocabulary {
         return words.size();
     }
 
+    // The next two functions are the same , another name was provided in the VocProvider
+    //  Was asked in the pdf
     public void addWord(SemanticWord word) {
+        words.add(word);
+    }
+
+    // it's whats call in the VocProvider
+    public void addSemanticWord(SemanticWord word) {
         words.add(word);
     }
 
@@ -39,6 +66,8 @@ public class Vocabulary {
         }
         return false;
     }
+
+
 
     public boolean hasNotAllocatedWord() {
         for (SemanticWord word : words) {
@@ -77,7 +106,7 @@ public class Vocabulary {
         for (SemanticWord word : words) {
             Gdx.app.log("EXCEPTION", "Voc: ");
             Gdx.app.log("EXCEPTION",
-                    word.getQuestion() + " / " + word.getSolution() + " :: "
+                    word.getQuestion(getLanguageFrom()) + " / " + word.getSolution(getLanguageTo()) + " :: "
             + "Allocated : " + word.isAllocated() + ", Found : " + word.isFound());
         }
     }

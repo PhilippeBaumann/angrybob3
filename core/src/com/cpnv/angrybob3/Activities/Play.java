@@ -139,7 +139,7 @@ public class Play extends BaseActivity implements InputProcessor {
                 if (firstPig) {
                     word = AngryBob.voc.pickNotFoundWord();
 
-                    questionPanel = new Panel(word);
+                    questionPanel = new Panel(word, AngryBob.voc.getLanguageFrom());
 
 
                 } else {

@@ -132,16 +132,23 @@ public class VocSelection extends BaseActivity implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 touchPoint = convertCoordinates(screenX, screenY);
+
+        // TODO Remove
         if (randomVocButton.isTouched(touchPoint)) {
-            AngryBob.popPage();
-            AngryBob.start();
+            //AngryBob.popPage();
+            //AngryBob.start();
         }
+
+        // Modify to get buttons for each language
+
         for (HashMap.Entry<Button, Vocabulary> entry : vocSelectionButtons.entrySet()) {
-            Button iconButton = entry.getKey();
-            if (iconButton.isTouched(touchPoint)) {
+            Button languageButton = entry.getKey();
+            if (languageButton.isTouched(touchPoint)) {
+                // Get the selected language To
                 Vocabulary selectedVoc = entry.getValue();
                 AngryBob.popPage();
-                AngryBob.start(selectedVoc);
+                // TODO Wait till the second button is selected for the training language
+                AngryBob.start(/*languageButton.getValue()*/ "en" , "fr");
             }
         }
         for (HashMap.Entry<Button, Vocabulary> entry : vocDetailButtons.entrySet()) {

@@ -78,8 +78,8 @@ public class VocDetail extends BaseActivity implements InputProcessor {
         float wordY = vocStartY + scrollOffset;
         for (SemanticWord word : voc.getWords()) {
             if (0 <= wordY && wordY <= vocStartY) {
-                wordFont.draw(batch, word.getQuestion(), COLUMN1_X, wordY);
-                wordFont.draw(batch, word.getSolution(), COLUMN2_X, wordY);
+                wordFont.draw(batch, word.getQuestion(AngryBob.voc.getLanguageFrom()), COLUMN1_X, wordY);
+                wordFont.draw(batch, word.getSolution(AngryBob.voc.getLanguageTo()), COLUMN2_X, wordY);
             }
             wordY -= wordHeight + WORD_MARGIN;
         }

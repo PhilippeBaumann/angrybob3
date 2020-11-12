@@ -36,15 +36,13 @@ public class AngryBob extends Game {
         pages.peek().render();
     }
 
-    public static void start(Vocabulary voc) {
+    public static void start(String LanguageFrom, String LanguageTo) {
         AngryBob.score = 0;
-        AngryBob.voc = voc;
+        AngryBob.voc = VocProvider.getInstance().pickAVoc();
+        AngryBob.voc.setLanguageFrom(LanguageFrom);
+        AngryBob.voc.setLanguageTo(LanguageTo);
         voc.resetFoundWords();
         AngryBob.pushPage(new Play());
-    }
-
-    public static void start() {
-        start(VocProvider.getInstance().pickAVoc());
     }
 
     public static void pushPage(Game game) {
