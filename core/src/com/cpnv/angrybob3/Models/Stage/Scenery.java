@@ -2,6 +2,7 @@ package com.cpnv.angrybob3.Models.Stage;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.cpnv.angrybob3.Models.Data.Word;
+import com.cpnv.angrybob3.Exceptions.OutOfSceneryException;
 
 
 import java.util.ArrayList;
@@ -20,11 +21,11 @@ public final class Scenery {
         pigs = new ArrayList<Pig>();
     }
 
-    public void addElement (PhysicalObject po) throws Exception
+    public void addElement (PhysicalObject po) throws OutOfSceneryException
     {
         for (PhysicalObject o : scene)
             if (po.collidesWith(o))
-                throw new Exception("Collision !!!!");
+                throw new OutOfSceneryException("Collision !!!!");
         scene.add(po);
         if (po.getClass().equals(Pig.class))
             pigs.add((Pig)po);
@@ -61,6 +62,15 @@ public final class Scenery {
             if (po.getClass().equals(Pig.class))
                 if (po.getRectangle().contains(x,y))
                     return (Pig)po;
+        return null;
+    }
+
+    public Button Touched(float x, float y)
+    {
+        for (PhysicalObject po : scene)
+            if (po.getClass().equals(Button.class))
+                if (po.getRectangle().contains(x,y))
+                    return (Button) po;
         return null;
     }
 

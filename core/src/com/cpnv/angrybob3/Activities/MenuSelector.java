@@ -13,7 +13,6 @@ import com.cpnv.angrybob3.Models.Stage.Title;
 public class MenuSelector extends GameActivity{
     private Texture background;
     private Title title;
-    private float splashTime = 3;
     private Sprite hat;
     private Sprite bob;
     private boolean direction = true;
@@ -23,64 +22,29 @@ public class MenuSelector extends GameActivity{
     {
         super();
         background = new Texture(Gdx.files.internal("background.png"));
-        title = new Title("LOADING", WORLD_HEIGHT);
+        title = new Title("Menu", WORLD_HEIGHT);
         hat = new Sprite(new Texture("loadingHat.png"));
         bob = new Sprite(new Texture("bird.png"));
-        hat.setBounds(camera.viewportWidth/2 - 50, camera.viewportHeight/5,100,100);
+        hat.setBounds(camera.viewportWidth/2 - 50, 180,100,100);
         hat.setOrigin(50,50);
+        bob.setBounds(camera.viewportWidth/2 - 50, 136,100,100);
         bob.setOrigin(50,50);
-        bob.setBounds(camera.viewportWidth/2 - 50, camera.viewportHeight/6,100,100);
     }
 
-    @Override
-    public void handleInput() {
-    }
+    public void update() {
 
-    @Override
-    public void update(float dt) {
-
-        // Hat animation
-        hat.rotate(3);
-        if (direction) {
-            hat.setY(hat.getY() + 6);
-        }else {
-            hat.setY(hat.getY() - 3);
-        }
-        if (hat.getY() >= camera.viewportHeight/2.8){
-            direction = false;
-        }
-        if (hat.getY() <= camera.viewportHeight/4.3){
-            direction = true;
-        }
-
-        // Bird animation
-        if (direction_bob) {
-            bob.setY(bob.getY() + 3);
-        }else {
-            bob.setY(bob.getY() - 2);
-        }
-        if (bob.getY() >= camera.viewportHeight/4.3){
-            direction_bob = false;
-        }
-        if (bob.getY() <= camera.viewportHeight/6.6){
-            direction_bob = true;
-        }
-
-        if (splashTime > 0)
-            splashTime -= dt;
-        else
-            launchScene("play");
+        launchScene("play");
 
         // To go to the settings
-        AngryBob.gameActivityManager.push(new GameOver());
+        //AngryBob.gameActivityManager.push(new GameOver());
 
         // To Close Game
-        Gdx.app.exit();
+        //Gdx.app.exit();
     }
 
     private void launchScene(String scene){
         // Settings X
-        AngryBob.gameActivityManager.push(new Play(/* With settings*/));
+        AngryBob.getInstance().push(AngryBob.ACTIVITY.Play);
     }
 
     @Override

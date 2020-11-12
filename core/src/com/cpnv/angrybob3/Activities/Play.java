@@ -11,6 +11,7 @@ import com.cpnv.angrybob3.Models.Data.Word;
 import com.cpnv.angrybob3.Models.Stage.Bird;
 import com.cpnv.angrybob3.Models.Stage.Board;
 import com.cpnv.angrybob3.Models.Stage.Bubble;
+import com.cpnv.angrybob3.Models.Stage.Button;
 import com.cpnv.angrybob3.Models.Stage.PhysicalObject;
 import com.cpnv.angrybob3.Models.Stage.Pig;
 import com.cpnv.angrybob3.Models.Stage.RubberBand;
@@ -20,7 +21,6 @@ import com.cpnv.angrybob3.Models.Stage.TNT;
 import com.cpnv.angrybob3.Models.Stage.Wasp;
 import com.cpnv.angrybob3.Models.Stage.WaspQueen;
 import com.cpnv.angrybob3.Providers.VocProvider;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -56,6 +56,11 @@ public class Play extends GameActivity implements InputProcessor {
     private RubberBand rubberBand2;
     private Queue<Touch> actions;
 
+    // Interface
+
+    private Button buttonPause;
+    private Button buttonScore;
+
     // Only One Lucky One Pig
     private boolean luckyOne;
     boolean luckyOneCreated = false;
@@ -79,13 +84,18 @@ public class Play extends GameActivity implements InputProcessor {
         rubberBand1 = new RubberBand();
         rubberBand2 = new RubberBand();
 
+        // Interface
+
+        buttonPause = new Button(new Vector2(x + 380, 800));
+        buttonScore = new Button(new Vector2(x + 280, 800));
+
         // Voc
-        vocabulary = vocProvider.pickVoc();
-        newWord = vocabulary.pickAWord();
+        //vocabulary = vocProvider.pickVoc();
+        //newWord = vocabulary.pickAWord();
 
         // Level Generation
         scenery = new Scenery();
-        generateLevel(false);
+        generateLevel(true);
 
         // Wasp Factory
         waspFactory(2, 1);
@@ -164,11 +174,11 @@ public class Play extends GameActivity implements InputProcessor {
             house.add("----XXX----");
             house.add("----XXX----");
             house.add("----XXX----");
-            house.add("----XXX----");
-            house.add("----XXX----");
-            house.add("----XXX----");
-            house.add("---XX-XX---");
-            house.add("--XX---XX--");
+            house.add("-XXXXXXXXX-");
+            house.add("-XX-----XX-");
+            house.add("-XX-----XX-");
+            house.add("-XX-----XX-");
+            house.add("-XX-----XX-");
             house.add("-XX-----XX-");
             house.reverse();
 
@@ -206,12 +216,30 @@ public class Play extends GameActivity implements InputProcessor {
                     Pig piggy = scenery.pigTouched(action.point.x, action.point.y);
                     if (piggy != null)
                         babble.add(new Bubble(piggy.getPosition().x, piggy.getPosition().y, piggy.getWord(), 2));
+
+                    // Button Handling
+                    if (buttonPause.collides(new Vector2(action.point.x, action.point.y))) {
+                        buttonPause.downed();
+                        AngryBob.getInstance().push(AngryBob.ACTIVITY.Pause);
+                    }
+
+                    if (buttonScore.collides(new Vector2(action.point.x, action.point.y))) {
+                        buttonScore.downed();
+                        AngryBob.getInstance().push(AngryBob.ACTIVITY.Score);
+                    }
+
                     break;
+
                 case up:
                     if (tweety.isFrozen() && action.point.x < TWEETY_START_X && action.point.y >= FLOOR_HEIGHT && action.point.y < TWEETY_START_Y) {
                         tweety.setSpeed(new Vector2(100 + (TWEETY_START_X - action.point.x) * ELASTICITY, 100 + (TWEETY_START_Y - action.point.y) * ELASTICITY));
                         tweety.unFreeze();
                     }
+
+                    // Reset Buttons
+                    buttonScore.upped();
+                    buttonPause.upped();
+
                     break;
                 case drag:
                     if (tweety.isFrozen() && action.point.x < TWEETY_START_X && action.point.y >= FLOOR_HEIGHT && action.point.y < TWEETY_START_Y) {
@@ -279,7 +307,7 @@ public class Play extends GameActivity implements InputProcessor {
 
         // GameOver Controller
         if (scoreBoard.gameOver()) {
-            AngryBob.gameActivityManager.push(new GameOver());
+            AngryBob.getInstance().push(AngryBob.ACTIVITY.GameOver);
             resetLevel(true);
         }
 
@@ -326,6 +354,12 @@ public class Play extends GameActivity implements InputProcessor {
         for (Wasp wasp : waspies){
             wasp.draw(spriteBatch);
         }
+
+        // Interface Renderer
+        buttonPause.draw(spriteBatch);
+        buttonScore.draw(spriteBatch);
+
+        // Scenery Renderer
         scenery.draw(spriteBatch);
         spriteBatch.draw(slingshot2, SLINGSHOT_OFFSET, FLOOR_HEIGHT, SLINGSHOT_WIDTH, SLINGSHOT_HEIGHT);
         spriteBatch.end();
@@ -363,8 +397,7 @@ public class Play extends GameActivity implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         Vector3 pointTouched = camera.unproject(new Vector3(screenX, screenY, 0));
-        actions.add(new Touch(pointTouched, Touch.Type.drag
-        ));
+        actions.add(new Touch(pointTouched, Touch.Type.drag));
         return false;
     }
 

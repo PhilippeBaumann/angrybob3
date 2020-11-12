@@ -1,30 +1,31 @@
 package com.cpnv.angrybob3.Activities;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector3;
 import com.cpnv.angrybob3.AngryBob;
-import com.cpnv.angrybob3.Models.Stage.ScoreBoard;
 import com.cpnv.angrybob3.Models.Stage.Title;
 
 /**
- * Created by Phil & XCL
+ * Created by Phil
  */
 
-public class GameOver extends GameActivity {
+public class Pause extends GameActivity {
 
-    private Texture background;
     private Title title;
 
-    public GameOver()
+    public Pause()
     {
-        super();
-        background = new Texture(Gdx.files.internal("background.png"));
-        //title = new Title("Game Over\n score: "+ ScoreBoard.score, 720);
+        //title = new Title("Paused", 600);
     }
 
     @Override
     public void render() {
+        super.render();
+
         spriteBatch.begin();
-        spriteBatch.draw(background, 0, 0, camera.viewportWidth, camera.viewportHeight);
         title.draw(spriteBatch);
         spriteBatch.end();
     }

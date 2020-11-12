@@ -1,7 +1,7 @@
 package com.cpnv.angrybob3.Models.Data;
 
 /**
- * Created by Phil & XCL
+ * Not used anymore
  */
 
 public class Language {
