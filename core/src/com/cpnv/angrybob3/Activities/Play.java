@@ -1,334 +1,289 @@
 package com.cpnv.angrybob3.Activities;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-import com.cpnv.angrybob3.AngryBob;
-import com.cpnv.angrybob3.Models.Data.Vocabulary;
-import com.cpnv.angrybob3.Models.Data.Word;
-import com.cpnv.angrybob3.Models.Stage.Bird;
-import com.cpnv.angrybob3.Models.Stage.Board;
-import com.cpnv.angrybob3.Models.Stage.Bubble;
-import com.cpnv.angrybob3.Models.Stage.PhysicalObject;
-import com.cpnv.angrybob3.Models.Stage.Pig;
-import com.cpnv.angrybob3.Models.Stage.RubberBand;
-import com.cpnv.angrybob3.Models.Stage.Scenery;
-import com.cpnv.angrybob3.Models.Stage.ScoreBoard;
-import com.cpnv.angrybob3.Models.Stage.TNT;
-import com.cpnv.angrybob3.Models.Stage.Wasp;
-import com.cpnv.angrybob3.Models.Stage.WaspQueen;
-import com.cpnv.angrybob3.Providers.VocProvider;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
-/**
- * Created by Phil & XCL
- */
+import com.cpnv.angrybob3.AngryBob;
+import com.cpnv.angrybob3.Model.RubberBand;
+import com.cpnv.angrybob3.Model.Scenery;
+import com.cpnv.angrybob3.Model.Bird;
+import com.cpnv.angrybob3.Model.Block;
+import com.cpnv.angrybob3.Model.OutOfSceneryException;
+import com.cpnv.angrybob3.Model.Panel;
+import com.cpnv.angrybob3.Model.PhysicalObject;
+import com.cpnv.angrybob3.Model.Pig;
+import com.cpnv.angrybob3.Model.SceneCollapseException;
+import com.cpnv.angrybob3.Model.ScoreInfluencer;
+import com.cpnv.angrybob3.Model.Tnt;
+import com.cpnv.angrybob3.Model.Wasp;
+import com.cpnv.angrybob3.Model.Data.NoPickableWordException;
+import com.cpnv.angrybob3.Model.Data.Word;
+import com.cpnv.angrybob3.ui.IconButton;
 
-public class Play extends GameActivity implements InputProcessor {
-
+public class Play extends BaseActivity implements InputProcessor {
     public static final int FLOOR_HEIGHT = 120;
-    private static final int SLINGSHOT_WIDTH = 75;
-    private static final int SLINGSHOT_HEIGHT = 225;
-    private static final int SLINGSHOT_OFFSET = 100;
-    public static final int TWEETY_START_X = SLINGSHOT_OFFSET + (SLINGSHOT_WIDTH - Bird.WIDTH) / 2;
-    public static final int TWEETY_START_Y = FLOOR_HEIGHT + SLINGSHOT_HEIGHT - Bird.HEIGHT;
-    private static final float ELASTICITY = 6f;
-    private final int TNT_PENALTY = 5;
-    private final int SCORE_BUMP_SUCCESS = 30;
-    private final int SCORE_BUMP_FAIL = 1;
 
+    public static final int BIRD_START_X = 200;
+    public static final int BIRD_START_Y = 200;
+
+    public static final int SUCCESS_POINTS = 100;
+
+    public static final float SLINGSHOT_POWER = 3f;
+
+    private static final int PIGS_QUANTITY = 5;
+    private static final int WASP_QUANTITY = 2;
+    private static final int TNT_QUANTITY = 3;
+    private static final int BLOCKS_QUANTITY = 50;
+
+    private static final int SLINGSHOT_WIDTH = 75;
+    private static final int SLINGSHOT_HEIGHT = BIRD_START_Y + Bird.HEIGHT - FLOOR_HEIGHT;
+
+    private static final int PAUSE_BUTTON_DIMENSIONS = 100;
+    private static final int PAUSE_BUTTON_X = WORLD_WIDTH - PAUSE_BUTTON_DIMENSIONS - 10;
+    private static final int PAUSE_BUTTON_Y = WORLD_HEIGHT - PAUSE_BUTTON_DIMENSIONS - 10;
+
+    private static final int SCORE_POSITION_X = WORLD_WIDTH / 2;
+    private static final int SCORE_POSITION_Y = WORLD_HEIGHT - 50;
+    private static final int VOC_POSITION_X = SCORE_POSITION_X;
+    private static final int VOC_POSITION_Y = WORLD_HEIGHT - 10;
+
+    private static final int AIMING_ZONE_X = BIRD_START_X + Bird.WIDTH;
+    private static final int AIMING_ZONE_Y = BIRD_START_Y + Bird.HEIGHT;
+
+    private static final int RUBBER_BAND_ORIGIN_OFFSET_X = 20;
+    private static final int RUBBER_BAND_ORIGIN_OFFSET_Y = 10;
+    private static final Vector2 RUBBER_BAND_1_DESTINATION = new Vector2(
+            BIRD_START_X + SLINGSHOT_WIDTH - 10,
+            FLOOR_HEIGHT + SLINGSHOT_HEIGHT - 30);
+    private static final Vector2 RUBBER_BAND_2_DESTINATION = new Vector2(
+            BIRD_START_X + 15,
+            FLOOR_HEIGHT + SLINGSHOT_HEIGHT - 30);
+
+    private static final float MAX_DT = 0.5f;
+
+    private Bird bird;
+    private ArrayList<Wasp> wasps;
     private Scenery scenery;
-    private Bird tweety;
-    private ArrayList<Wasp> waspies = new ArrayList<Wasp>();
-    private ArrayList<Bubble> babble;
-    private Texture background;
+
+    private BitmapFont infoFont;
+
+    private IconButton pauseButton;
+
+    private Panel questionPanel;
+
+    private Rectangle aimingZone;
+
     private Texture slingshot1;
     private Texture slingshot2;
-    private Board board;
-    private ScoreBoard scoreBoard;
     private RubberBand rubberBand1;
     private RubberBand rubberBand2;
-    private Queue<Touch> actions;
-
-    // Only One Lucky One Pig
-    private boolean luckyOne;
-    boolean luckyOneCreated = false;
-
-    // Vocabulary Feature
-    private VocProvider vocProvider = VocProvider.getInstance();
-    private Vocabulary vocabulary;
-    private Word newWord;
 
     public Play() {
-        super();
+        bird = new Bird();
 
-        babble = new ArrayList<Bubble>();
+        wasps = new ArrayList<>();
+        for (int i = 0; i < WASP_QUANTITY; i++) {
+            Wasp wasp = new Wasp(new Vector2(WORLD_WIDTH / 2f, WORLD_HEIGHT / 2f), new Vector2(40, 40));
+            wasps.add(wasp);
+        }
 
-        background = new Texture(Gdx.files.internal("background.png"));
+        scenery = new Scenery();
+
+        int blocksLeft = BLOCKS_QUANTITY;
+        while (blocksLeft > 0) {
+            try {
+                Block block = new Block(new Vector2(
+                        AngryBob.alea.nextFloat() * (Scenery.MAX_X - Block.WIDTH - Scenery.MIN_X) + Scenery.MIN_X,
+                        0
+                ));
+                scenery.dropElement(block);
+                blocksLeft--;
+            } catch (OutOfSceneryException exception) {
+                Gdx.app.log("EXCEPTION", "Block out of bounds: " + exception.getMessage());
+            } catch (SceneCollapseException exception) {
+                Gdx.app.log("EXCEPTION", "Unstable block: " + exception.getMessage());
+            }
+        }
+
+        int tntLeft = TNT_QUANTITY;
+        while (tntLeft > 0) {
+            try {
+                Tnt tnt = new Tnt(new Vector2(
+                        AngryBob.alea.nextFloat() * (Scenery.MAX_X - Tnt.WIDTH - Scenery.MIN_X) + Scenery.MIN_X,
+                        0));
+                scenery.dropElement(tnt);
+                tntLeft--;
+            } catch (OutOfSceneryException exception) {
+                Gdx.app.log("EXCEPTION", "TNT out of bounds: " + exception.getMessage());
+            } catch (SceneCollapseException exception) {
+                Gdx.app.log("EXCEPTION", "Unstable TNT: " + exception.getMessage());
+            }
+        }
+
+        AngryBob.voc.deallocateAll();
+        int pigsLeft = PIGS_QUANTITY;
+        boolean firstPig = true;
+        while (pigsLeft > 0) {
+            try {
+                Word word;
+                // The first pig will have a word that has never been found
+                // It will be the word of the question panel
+                if (firstPig) {
+                    word = AngryBob.voc.pickNotFoundWord();
+
+                    questionPanel = new Panel(word);
+
+
+                } else {
+                    word = AngryBob.voc.pickNotAllocatedWord();
+                }
+
+                Pig pig = new Pig(new Vector2(
+                        AngryBob.alea.nextFloat() * (Scenery.MAX_X - Pig.WIDTH - Scenery.MIN_X) + Scenery.MIN_X,
+                        0),
+                        word);
+                scenery.dropElement(pig);
+
+                // Update the Data now that the pig has been constructed without error
+                firstPig = false;
+                pigsLeft--;
+                pig.getWord().setAllocated(true);
+            } catch (OutOfSceneryException exception) {
+                Gdx.app.log("EXCEPTION", "Pig out of bounds: " + exception.getMessage());
+            } catch (SceneCollapseException exception) {
+                Gdx.app.log("EXCEPTION", "Unstable pig: " + exception.getMessage());
+            } catch (NoPickableWordException exception) {
+                Gdx.app.log("EXCEPTION", "No more available words: " + exception.getMessage());
+                break;
+            }
+        }
+
+        pauseButton = new IconButton(
+                new Vector2(PAUSE_BUTTON_X, PAUSE_BUTTON_Y),
+                PAUSE_BUTTON_DIMENSIONS, PAUSE_BUTTON_DIMENSIONS,
+                "block.png"
+        );
+
         slingshot1 = new Texture(Gdx.files.internal("slingshot.png"));
         slingshot2 = new Texture(Gdx.files.internal("slingshotFront.png"));
-
-        tweety = new Bird();
-        tweety.freeze();
         rubberBand1 = new RubberBand();
         rubberBand2 = new RubberBand();
 
-        // Voc
-        vocabulary = vocProvider.pickVoc();
-        newWord = vocabulary.pickAWord();
+        infoFont = new BitmapFont();
+        infoFont.setColor(Color.BLACK);
+        infoFont.getData().setScale(2);
 
-        // Level Generation
-        scenery = new Scenery();
-        generateLevel(false);
-
-        // Wasp Factory
-        waspFactory(2, 1);
-
-        board = new Board(newWord); // Put one word from a pig on the board
-        scoreBoard = new ScoreBoard(0, 200, 3);
-
-        Gdx.input.setInputProcessor(this);
-        actions = new LinkedList<Touch>(); // User inputs are queued in here when events fire, handleInput processes them
-
-        // Display Bob Message
-        babble.add(new Bubble(tweety.getPosition().x, tweety.getPosition().y, "Let's Get My Hat Back ! \nEl Mucho Jalapenos!", 6));
+        aimingZone = new Rectangle(0, 0, AIMING_ZONE_X, AIMING_ZONE_Y);
     }
 
-    private void generateLevel(boolean procedural) {
+    public void update() {
+        // number of milliseconds elapsed since last render
+        float dt = Gdx.graphics.getDeltaTime();
 
-        // Scene clearing (first time nothing to clear = almost no impact)
-        scenery.clear();
+        if (dt < MAX_DT) { // Ignore big lapses, like the ones at the start of the game
+            // --------- Bird
+            // Apply changes to the bird. The magnitude of the changes depend on the time elapsed since last update !!!
+            if (bird.getState() == Bird.State.FLYING) {
+                bird.move(dt);
+                bird.accelerate(dt);
 
-        // Determine if the world if procedurally generated or using pre-made structures.
-        if (procedural){
-            // Wood Carpet Generation
-            for (int i = 5; i < WORLD_WIDTH / 50; i++) {
-                try {
-                    scenery.addElement(new PhysicalObject(new Vector2(i * 50, FLOOR_HEIGHT), 50, 50, "block.png"));
-                } catch (Exception e) {
-                    Gdx.app.log("Level Generation", "Could not add Wood Box to scene");
-                }
-            }
-
-            // TNT Crates Generation
-            for (int i = 0; i < 2; i++) {
-                try {
-                    int x = getRandomCoordinate();
-                    // Debugging to get an idea of proportion / placement
-                    Gdx.app.log("Level Generation", "X of TNT : "+ x);
-                    // Add the TNT to the scene, if it is not possible the creation isn't forced
-                    scenery.addElement(new TNT(new Vector2(x, FLOOR_HEIGHT + 50), TNT_PENALTY));
-                } catch (Exception e) {
-                    Gdx.app.log("Level Generation", "Could not add TNT Barrel to scene");
-                }
-            }
-
-            // Pig Generation
-            for (int i = 0; i < 8; i++) {
-                try {
-
-                    // Lucky (Word bearer) Handling
-                    if (luckyOneCreated){
-                        luckyOne = false;
-                    } else {
-                        luckyOne = AngryBob.random.nextBoolean();
+                PhysicalObject objectHit = scenery.objectHitBy(bird);
+                for (Wasp wasp : wasps) {
+                    if (wasp.collidesWith(bird)) {
+                        objectHit = wasp;
                     }
-
-                    if (luckyOne) {
-                        // Try placing the lucky pig, if not placed try to find a spot until it works
-                        while (!luckyOneCreated){
-                            try{
-                                scenery.addElement(new Pig(new Vector2(getRandomCoordinate(), FLOOR_HEIGHT + 50) , newWord.getValue1(), luckyOne));
-                                luckyOneCreated = true;
-                            } catch(Exception e){
-                                Gdx.app.log("Angry Bob Level", "Could not add lucky Pig to scene" + e);
+                }
+                if (objectHit != null) {
+                    if (objectHit instanceof ScoreInfluencer) {
+                        ScoreInfluencer scoreInfluencer = (ScoreInfluencer) objectHit;
+                        AngryBob.score += scoreInfluencer.getPoints();
+                        scenery.removeElement(objectHit);
+                    }
+                    if (objectHit instanceof Pig) {
+                        Pig pig = (Pig) objectHit;
+                        if (pig.getWord() == questionPanel.getWord()) {
+                            AngryBob.score -= pig.getPoints();
+                            AngryBob.score += SUCCESS_POINTS;
+                            questionPanel.getWord().setFound(true);
+                            AngryBob.popPage();
+                            if (AngryBob.voc.hasNotFoundWord()) {
+                                AngryBob.pushPage(new Play());
+                            } else {
+                                AngryBob.pushPage(new GameOver());
                             }
                         }
-                    } else{
-                        scenery.addElement(new Pig(new Vector2(getRandomCoordinate(), FLOOR_HEIGHT + 50) , vocabulary.pickAWord().getValue1(), luckyOne));
                     }
-                } catch (Exception e) {
-                    Gdx.app.log("Angry Bob Level", "Could not add Pig to scene" + e);
+                    scenery.removeElement(objectHit);
+                    if (objectHit instanceof Wasp) {
+                        wasps.remove(objectHit);
+                    }
+                    bird = new Bird();
                 }
             }
-        } else{
-            // House
-            Array<String> house = new Array<>();
-            house.add("-----X-----");
-            house.add("----XXX----");
-            house.add("----XXX----");
-            house.add("----XXX----");
-            house.add("----XXX----");
-            house.add("----XXX----");
-            house.add("----XXX----");
-            house.add("---XX-XX---");
-            house.add("--XX---XX--");
-            house.add("-XX-----XX-");
-            house.reverse();
 
-            for (int y = 0; y < 10; y++) {
-                for(int x= 0; x < house.get(y).length(); x++)
-                try {
-                    if (String.valueOf(house.get(y).charAt(x)).equals("X"))
-                        scenery.addElement(new PhysicalObject(new Vector2(600 + x * 50, 50*y + FLOOR_HEIGHT), 50, 50, "block.png"));
-                } catch (Exception e) {
-                    Gdx.app.log("Level Generation", "Could not add Wood Box to scene");
-                }
+            // If the bird has gone out of bound, it is time to stop that throw and start a new one
+            if (bird.getXRight() < 0 || bird.getXLeft() > WORLD_WIDTH || bird.getYTop() < 0) {
+                bird = new Bird();
             }
-        }
 
-        // Lucky pig reset
-        luckyOneCreated = false;
-    }
-
-    // Generate a random number (x coordinate) and place the output between 300 and 1500 (WORLD_WIDTH)
-    public int getRandomCoordinate(){
-        return AngryBob.random.nextInt(WORLD_WIDTH - WORLD_WIDTH / 5) + WORLD_WIDTH / 6;
-    }
-
-    public void handleInput() {
-        Touch action;
-        while ((action = actions.poll()) != null) {
-            switch (action.type) {
-                case down:
-                    if (tweety.isFrozen() && action.point.x < TWEETY_START_X && action.point.y >= FLOOR_HEIGHT && action.point.y < TWEETY_START_Y) {
-                        tweety.setX(action.point.x);
-                        tweety.setY(action.point.y);
-                    }
-
-                    // Pig Clicking
-                    Pig piggy = scenery.pigTouched(action.point.x, action.point.y);
-                    if (piggy != null)
-                        babble.add(new Bubble(piggy.getPosition().x, piggy.getPosition().y, piggy.getWord(), 2));
-                    break;
-                case up:
-                    if (tweety.isFrozen() && action.point.x < TWEETY_START_X && action.point.y >= FLOOR_HEIGHT && action.point.y < TWEETY_START_Y) {
-                        tweety.setSpeed(new Vector2(100 + (TWEETY_START_X - action.point.x) * ELASTICITY, 100 + (TWEETY_START_Y - action.point.y) * ELASTICITY));
-                        tweety.unFreeze();
-                    }
-                    break;
-                case drag:
-                    if (tweety.isFrozen() && action.point.x < TWEETY_START_X && action.point.y >= FLOOR_HEIGHT && action.point.y < TWEETY_START_Y) {
-                        tweety.setX(action.point.x);
-                        tweety.setY(action.point.y);
-                    }
-                    break;
+            // --------- Wasp
+            // Apply changes to the wasp...
+            for (Wasp wasp : wasps) {
+                wasp.move(dt);
+                wasp.accelerate(dt);
             }
+
+            // --------- RubberBand
+            Vector2 rubberBandOrigin = new Vector2(
+                    bird.getX() + RUBBER_BAND_ORIGIN_OFFSET_X,
+                    bird.getY() + RUBBER_BAND_ORIGIN_OFFSET_Y);
+            rubberBand1.putBetween(
+                    rubberBandOrigin,
+                    RUBBER_BAND_1_DESTINATION);
+            rubberBand2.putBetween(
+                    rubberBandOrigin,
+                    RUBBER_BAND_2_DESTINATION);
         }
     }
-
-    public void update(float dt) {
-        //  Bird Movement Updater
-        tweety.accelerate(dt);
-        tweety.move(dt);
-
-        // Custom Collision System
-        PhysicalObject hit = scenery.collidesWith(tweety);
-        if (hit != null) {
-            String c = hit.getClass().getSimpleName();
-            if (c.equals("TNT")) {
-                scoreBoard.scoreChange(-((TNT) hit).getNegativePoints());
-            } else if (c.equals("Pig")) {
-                Pig p = (Pig)hit;
-                if (p.getWordValue() == board.getWord()) {
-                    scoreBoard.scoreChange(SCORE_BUMP_SUCCESS);
-                    scoreBoard.setLifeCount(+1);
-                    scoreBoard.timerChange(+30);
-                    p.looseHat();
-                    resetLevel(false);
-                } else {
-                    scoreBoard.scoreChange(-SCORE_BUMP_FAIL);
-                }
-            }
-            tweety.reset();
-        }
-
-        // Wasp
-        for (Wasp wasp : waspies){
-            wasp.accelerate(dt);
-            wasp.move(dt);
-
-            if (tweety.collidesWith(wasp) && !tweety.isFrozen()) {
-                scoreBoard.scoreChange(-100);
-                scoreBoard.setLifeCount(-1);
-                tweety.reset();
-            }
-        }
-
-        // Bird Respawn
-        if (tweety.getX() > WORLD_WIDTH - Bird.WIDTH) tweety.reset();
-
-        // Bubbles Update
-        for (int i = babble.size() - 1; i >= 0; i--) {
-            babble.get(i).ageAway(dt);
-            if (babble.get(i).isDead()) babble.remove(i);
-        }
-
-        // Rubberbands
-        rubberBand1.between(new Vector2(tweety.getX() + 20, tweety.getY() + 10), new Vector2(SLINGSHOT_OFFSET + SLINGSHOT_WIDTH, SLINGSHOT_HEIGHT + FLOOR_HEIGHT - 40));
-        rubberBand2.between(new Vector2(tweety.getX() + 20, tweety.getY() + 10), new Vector2(SLINGSHOT_OFFSET + 15, SLINGSHOT_HEIGHT + FLOOR_HEIGHT - 40));
-
-        // Scoreboard
-        scoreBoard.update(dt);
-
-        // GameOver Controller
-        if (scoreBoard.gameOver()) {
-            AngryBob.gameActivityManager.push(new GameOver());
-            resetLevel(true);
-        }
-
-        camera.position.lerp(posCameraDesired,0.1f);
-    }
-
-    private void resetLevel(boolean gameover) {
-
-        // Reset Pig and TNTs , maybe Wasp position
-
-        // Voc Handler
-        newWord = vocabulary.pickAWord();
-        board.setWord(newWord);
-
-        if (gameover){
-            scoreBoard.reset(); // Reset Score
-        }
-
-        generateLevel(true);
-
-        //luckyOne = false;
-
-        // Optional Hat handling
-        //tweety.LoseHat();
-    }
-
-    public Vector3 posCameraDesired = new Vector3(20, 30, 0);
 
     @Override
     public void render() {
-        spriteBatch.begin();
-        spriteBatch.draw(background, 0, 0, camera.viewportWidth, camera.viewportHeight);
-        board.draw(spriteBatch);
-        scoreBoard.draw(spriteBatch);
-        spriteBatch.draw(slingshot1, SLINGSHOT_OFFSET, FLOOR_HEIGHT, SLINGSHOT_WIDTH, SLINGSHOT_HEIGHT);
-        if (tweety.isFrozen())
-        {
-            for (Bubble b : babble) b.draw(spriteBatch);
-            rubberBand1.draw(spriteBatch);
+        update();
+
+        super.render();
+
+        batch.begin();
+
+        // Note that the order in which they are drawn matters, the last ones are on top of the previous ones
+        for (Wasp wasp : wasps) {
+            wasp.draw(batch);
         }
-        tweety.draw(spriteBatch);
-        if (tweety.isFrozen())
-            rubberBand2.draw(spriteBatch);
-        for (Wasp wasp : waspies){
-            wasp.draw(spriteBatch);
+        scenery.draw(batch);
+        questionPanel.draw(batch);
+        batch.draw(slingshot1, BIRD_START_X, FLOOR_HEIGHT, SLINGSHOT_WIDTH, SLINGSHOT_HEIGHT);
+        if (bird.getState() == Bird.State.AIMING) {
+            rubberBand1.draw(batch);
         }
-        scenery.draw(spriteBatch);
-        spriteBatch.draw(slingshot2, SLINGSHOT_OFFSET, FLOOR_HEIGHT, SLINGSHOT_WIDTH, SLINGSHOT_HEIGHT);
-        spriteBatch.end();
+        bird.draw(batch);
+        batch.draw(slingshot2, BIRD_START_X, FLOOR_HEIGHT, SLINGSHOT_WIDTH, SLINGSHOT_HEIGHT);
+        if (bird.getState() == Bird.State.AIMING) {
+            rubberBand2.draw(batch);
+        }
+        pauseButton.draw(batch);
+        drawGameInfo();
+        batch.end();
+    }
+
+    private void drawGameInfo() {
+        infoFont.draw(batch, "Voc : " + AngryBob.voc.getName(), VOC_POSITION_X, VOC_POSITION_Y);
+        infoFont.draw(batch, "Score : " + AngryBob.score, SCORE_POSITION_X, SCORE_POSITION_Y);
     }
 
     @Override
@@ -348,24 +303,43 @@ public class Play extends GameActivity implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Vector3 pointTouched = camera.unproject(new Vector3(screenX, screenY, 0));
-        actions.add(new Touch(pointTouched, Touch.Type.down));
-        return false;
+        Vector2 touchPoint = convertCoordinates(screenX, screenY);
+
+        if (pauseButton.contains(touchPoint)) {
+            AngryBob.pushPage(new Pause());
+            return true;
+        }
+
+        boolean actionHandled = scenery.handleTouchDown(touchPoint);
+
+        if (!actionHandled
+                && aimingZone.contains(touchPoint)) {
+            bird.startAim(touchPoint);
+        }
+        return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        Vector3 pointTouched = camera.unproject(new Vector3(screenX, screenY, 0));
-        actions.add(new Touch(pointTouched, Touch.Type.up));
-        return false;
+        Vector2 touchPoint = convertCoordinates(screenX, screenY);
+
+        scenery.handleTouchUp(touchPoint);
+
+        if (aimingZone.contains(touchPoint)) {
+            bird.launchFrom(touchPoint);
+        }
+        return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Vector3 pointTouched = camera.unproject(new Vector3(screenX, screenY, 0));
-        actions.add(new Touch(pointTouched, Touch.Type.drag
-        ));
-        return false;
+        Vector2 touchPoint = convertCoordinates(screenX, screenY);
+        Gdx.app.log("ANGRY", "Drag at " + touchPoint.x + "," + touchPoint.y);
+
+        if (aimingZone.contains(touchPoint)) {
+            bird.drag(touchPoint);
+        }
+        return true;
     }
 
     @Override
@@ -376,16 +350,5 @@ public class Play extends GameActivity implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
-    }
-
-    // Generators
-
-    private void waspFactory(int wasps, int waspQueens){
-        for ( int waspAmount = 0; waspAmount < wasps ; waspAmount++) {
-            waspies.add(new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        }
-        for ( int waspAmount = 0; waspAmount < waspQueens ; waspAmount++) {
-            waspies.add(new WaspQueen(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 20)));
-        }
     }
 }

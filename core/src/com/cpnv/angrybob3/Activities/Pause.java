@@ -1,23 +1,24 @@
 package com.cpnv.angrybob3.Activities;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 import com.cpnv.angrybob3.AngryBob;
 
-public class Welcome extends BaseActivity {
-    private static final String TITLE = "AngryBob";
-    private static final int TITLE_SCALE = 6;
+public class Pause extends BaseActivity implements InputProcessor {
+    private static final String TITLE = "Pause";
+    private static final int TITLE_SIZE = 6;
 
     private BitmapFont titleFont;
     private float titlePositionX;
     private float titlePositionY;
 
-    public Welcome() {
+    public Pause() {
         titleFont = new BitmapFont();
-        titleFont.setColor(Color.ROYAL);
-        titleFont.getData().setScale(TITLE_SCALE);
+        titleFont.setColor(Color.RED);
+        titleFont.getData().setScale(TITLE_SIZE);
         GlyphLayout titleGlyphLayout = new GlyphLayout();
         titleGlyphLayout.setText(titleFont, TITLE);
         titlePositionX = Play.WORLD_WIDTH / 2f - titleGlyphLayout.width / 2f;
@@ -35,7 +36,7 @@ public class Welcome extends BaseActivity {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        AngryBob.pushPage(new VocSelection());
+        AngryBob.popPage();
         return true;
     }
 }

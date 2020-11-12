@@ -1,144 +1,157 @@
 package com.cpnv.angrybob3.Providers;
 
-import com.cpnv.angrybob3.AngryBob;
-import com.cpnv.angrybob3.Models.Data.Vocabulary;
-import com.cpnv.angrybob3.Models.Data.Word;
-
 import java.util.ArrayList;
 
+import com.cpnv.angrybob3.AngryBob;
+import com.cpnv.angrybob3.Model.Data.Vocabulary;
+import com.cpnv.angrybob3.Model.Data.Word;
+
 public class VocProvider {
+    // singleton
+    private static VocProvider single_instance = null;
 
-    private static VocProvider songle_instance = null;
-
-    public ArrayList<Vocabulary> vocs;
-
-    private VocProvider(){
-        vocs = new ArrayList<Vocabulary>();
-        Word word;
-        Vocabulary vocabulary = new Vocabulary("L'argent");
-        word = new Word("Money Money!","argent"); vocabulary.addWord(word);
-        word = new Word("la banque","the bank"); vocabulary.addWord(word);
-        word = new Word("l''argent liquide","cash"); vocabulary.addWord(word);
-        word = new Word("le paiement","payment"); vocabulary.addWord(word);
-        word = new Word("un carnet de chèques","checkbook"); vocabulary.addWord(word);
-        word = new Word("déposer de l''argent","to deposit money"); vocabulary.addWord(word);
-        word = new Word("prêter de l''argent","to borrow money"); vocabulary.addWord(word);
-        word = new Word("les services financiers","financial services"); vocabulary.addWord(word);
-        word = new Word("la commission","commission"); vocabulary.addWord(word);
-        word = new Word("un investissement","an investment"); vocabulary.addWord(word);
-        word = new Word("un virement","transfer"); vocabulary.addWord(word);
-        word = new Word("la gestion de l''argent","money management"); vocabulary.addWord(word);
-        word = new Word("une transaction","a transaction"); vocabulary.addWord(word);
-        word = new Word("un guichet automatique","ATM machine"); vocabulary.addWord(word);
-        word = new Word("attendre dans la queue","to wait in line"); vocabulary.addWord(word);
-        word = new Word("une carte bancaire","banking/ATM card"); vocabulary.addWord(word);
-        word = new Word("faire des économies","to save money"); vocabulary.addWord(word);
-        word = new Word("le montant","sum/total amount"); vocabulary.addWord(word);
-        word = new Word("un compte-chèques","checking account"); vocabulary.addWord(word);
-        word = new Word("l''argent","money"); vocabulary.addWord(word);
-        word = new Word("les fonds","funds"); vocabulary.addWord(word);
-        word = new Word("un chèque","check"); vocabulary.addWord(word);
-        word = new Word("un dépôt","deposit"); vocabulary.addWord(word);
-        word = new Word("le crédit","credit"); vocabulary.addWord(word);
-        word = new Word("les marchés financiers","financial markets"); vocabulary.addWord(word);
-        word = new Word("la clientèle","clientele"); vocabulary.addWord(word);
-        word = new Word("les frais","fees"); vocabulary.addWord(word);
-        word = new Word("une institution financière","financial institution"); vocabulary.addWord(word);
-        word = new Word("le taux d''intérêt","interest rate"); vocabulary.addWord(word);
-        word = new Word("la monnaie","currency"); vocabulary.addWord(word);
-        word = new Word("le bilan","balance"); vocabulary.addWord(word);
-        word = new Word("prendre un numéro","to take a number"); vocabulary.addWord(word);
-        word = new Word("une carte de crédit","credit card"); vocabulary.addWord(word);
-        word = new Word("un emprunt","a loan"); vocabulary.addWord(word);
-        word = new Word("retirer de l''argent","to take out money"); vocabulary.addWord(word);
-        word = new Word("un compte d''épargne","savings account"); vocabulary.addWord(word);
-        word = new Word("un distributeur automatique","ATM machine"); vocabulary.addWord(word);
-        word = new Word("un reçu","receipt"); vocabulary.addWord(word);
-        vocs.add(vocabulary);
-
-        vocabulary = new Vocabulary("Le Mobilier");
-        word = new Word("une table","a table"); vocabulary.addWord(word);
-        word = new Word("une chaise","a chair"); vocabulary.addWord(word);
-        word = new Word("une bibliothèque","a bookcase"); vocabulary.addWord(word);
-        word = new Word("une table basse","a coffee table"); vocabulary.addWord(word);
-        word = new Word("une cheminée","a fireplace"); vocabulary.addWord(word);
-        word = new Word("une table de chevet","a bedside table"); vocabulary.addWord(word);
-        word = new Word("une étagère","a shelf"); vocabulary.addWord(word);
-        word = new Word("une armoire","a wardrobe"); vocabulary.addWord(word);
-        word = new Word("une commode","a dresser"); vocabulary.addWord(word);
-        word = new Word("une moquette","a carpet"); vocabulary.addWord(word);
-        word = new Word("un siège","a seat"); vocabulary.addWord(word);
-        word = new Word("un tabouret","a stool"); vocabulary.addWord(word);
-        word = new Word("un placard","a cupboard"); vocabulary.addWord(word);
-        word = new Word("un tiroir","a drawer"); vocabulary.addWord(word);
-        word = new Word("un fauteuil","a armchair"); vocabulary.addWord(word);
-        word = new Word("un lit","a bed"); vocabulary.addWord(word);
-        word = new Word("un bureau","a desk"); vocabulary.addWord(word);
-        word = new Word("un miroir","a mrror"); vocabulary.addWord(word);
-        word = new Word("un meuble","a piece of furniture"); vocabulary.addWord(word);
-        word = new Word("un oreiller","a pillow"); vocabulary.addWord(word);
-        vocs.add(vocabulary);
-
-        vocabulary = new Vocabulary("Les Couleurs");
-        word = new Word("blanc","white"); vocabulary.addWord(word);
-        word = new Word("bleu clair","light blue"); vocabulary.addWord(word);
-        word = new Word("multicolore","muli-colored"); vocabulary.addWord(word);
-        word = new Word("gris","grey"); vocabulary.addWord(word);
-        word = new Word("vert","green"); vocabulary.addWord(word);
-        word = new Word("noir","black"); vocabulary.addWord(word);
-        word = new Word("argenté","silver"); vocabulary.addWord(word);
-        word = new Word("jaune","yellow"); vocabulary.addWord(word);
-        word = new Word("orange","orange"); vocabulary.addWord(word);
-        word = new Word("bleu","blue"); vocabulary.addWord(word);
-        word = new Word("bleu foncé","dark blue"); vocabulary.addWord(word);
-        word = new Word("rose","pink"); vocabulary.addWord(word);
-        word = new Word("rouge","red"); vocabulary.addWord(word);
-        word = new Word("marron","brown"); vocabulary.addWord(word);
-        word = new Word("violet","purple"); vocabulary.addWord(word);
-        word = new Word("beige","beige"); vocabulary.addWord(word);
-        word = new Word("turquoise","turquoise"); vocabulary.addWord(word);
-        word = new Word("doré","golden"); vocabulary.addWord(word);
-        vocs.add(vocabulary);
-
-        vocabulary = new Vocabulary("La Famille");
-        word = new Word("le père","the father"); vocabulary.addWord(word);
-        word = new Word("les parents","the parents"); vocabulary.addWord(word);
-        word = new Word("la sœur","the sister"); vocabulary.addWord(word);
-        word = new Word("la fille","the daughter"); vocabulary.addWord(word);
-        word = new Word("le bébé","the baby"); vocabulary.addWord(word);
-        word = new Word("la femme","the wife"); vocabulary.addWord(word);
-        word = new Word("la fiancée","the fiancée"); vocabulary.addWord(word);
-        word = new Word("la grand-mère","the grandmother"); vocabulary.addWord(word);
-        word = new Word("les petits-enfants","the grandchildren"); vocabulary.addWord(word);
-        word = new Word("la tante","the aunt"); vocabulary.addWord(word);
-        word = new Word("la nièce","the niece"); vocabulary.addWord(word);
-        word = new Word("la belle-mère","the step mother"); vocabulary.addWord(word);
-        word = new Word("la cousine","the cousin (female)"); vocabulary.addWord(word);
-        word = new Word("la belle-sœur","sister in-law"); vocabulary.addWord(word);
-        word = new Word("la mère","the mother"); vocabulary.addWord(word);
-        word = new Word("le frère","the brother"); vocabulary.addWord(word);
-        word = new Word("le fils","the son"); vocabulary.addWord(word);
-        word = new Word("l’enfant","the child"); vocabulary.addWord(word);
-        word = new Word("le mari","the husband"); vocabulary.addWord(word);
-        word = new Word("le fiancé","the fiancé"); vocabulary.addWord(word);
-        word = new Word("le grand-père","the grandfather"); vocabulary.addWord(word);
-        word = new Word("les grand-parents","the grandparents"); vocabulary.addWord(word);
-        word = new Word("l’oncle","the uncle"); vocabulary.addWord(word);
-        word = new Word("le neveu","the nephew"); vocabulary.addWord(word);
-        word = new Word("le beau-père","the step father"); vocabulary.addWord(word);
-        word = new Word("le cousin","the cousin (male)"); vocabulary.addWord(word);
-        word = new Word("le beau-frère","brother in-law"); vocabulary.addWord(word);
-        word = new Word("le beau-père","father in-law"); vocabulary.addWord(word);
-        vocs.add(vocabulary);
+    public static VocProvider getInstance() {
+        if (single_instance == null) {
+            single_instance = new VocProvider(false);
+        }
+        return single_instance;
     }
 
-    public static VocProvider getInstance(){
-        if (songle_instance == null)
-            songle_instance = new VocProvider();
-        return songle_instance;
+    public Vocabulary pickAVoc() {
+        return vocabularies.get(AngryBob.alea.nextInt(vocabularies.size()));
     }
 
-    public Vocabulary pickVoc() {
-        return vocs.get(AngryBob.random.nextInt(vocs.size()));
+    // All available vocabularies
+    public ArrayList<Vocabulary> vocabularies;
+
+    private VocProvider(boolean smallVoc) {
+        this();
+        if(smallVoc) {
+            vocabularies = new ArrayList<Vocabulary>();
+            Word w;
+            Vocabulary voc = new Vocabulary("L'argent");
+            w = new Word("la banque","the bank"); voc.addWord(w);
+            w = new Word("l''argent liquide","cash"); voc.addWord(w);
+            vocabularies.add(voc);
+        }
+    }
+
+    private VocProvider() {
+        vocabularies = new ArrayList<Vocabulary>();
+        Word w;
+        Vocabulary voc = new Vocabulary("L'argent");
+        w = new Word("la banque","the bank"); voc.addWord(w);
+        w = new Word("l''argent liquide","cash"); voc.addWord(w);
+        w = new Word("le paiement","payment"); voc.addWord(w);
+        w = new Word("un carnet de chèques","checkbook"); voc.addWord(w);
+        w = new Word("déposer de l''argent","to deposit money"); voc.addWord(w);
+        w = new Word("prêter de l''argent","to borrow money"); voc.addWord(w);
+        w = new Word("les services financiers","financial services"); voc.addWord(w);
+        w = new Word("la commission","commission"); voc.addWord(w);
+        w = new Word("un investissement","an investment"); voc.addWord(w);
+        w = new Word("un virement","transfer"); voc.addWord(w);
+        w = new Word("la gestion de l''argent","money management"); voc.addWord(w);
+        w = new Word("une transaction","a transaction"); voc.addWord(w);
+        w = new Word("un guichet automatique","ATM machine"); voc.addWord(w);
+        w = new Word("attendre dans la queue","to wait in line"); voc.addWord(w);
+        w = new Word("une carte bancaire","banking/ATM card"); voc.addWord(w);
+        w = new Word("faire des économies","to save money"); voc.addWord(w);
+        w = new Word("le montant","sum/total amount"); voc.addWord(w);
+        w = new Word("un compte-chèques","checking account"); voc.addWord(w);
+        w = new Word("l''argent","money"); voc.addWord(w);
+        w = new Word("les fonds","funds"); voc.addWord(w);
+        w = new Word("un chèque","check"); voc.addWord(w);
+        w = new Word("un dépôt","deposit"); voc.addWord(w);
+        w = new Word("le crédit","credit"); voc.addWord(w);
+        w = new Word("les marchés financiers","financial markets"); voc.addWord(w);
+        w = new Word("la clientèle","clientele"); voc.addWord(w);
+        w = new Word("les frais","fees"); voc.addWord(w);
+        w = new Word("une institution financière","financial institution"); voc.addWord(w);
+        w = new Word("le taux d''intérêt","interest rate"); voc.addWord(w);
+        w = new Word("la monnaie","currency"); voc.addWord(w);
+        w = new Word("le bilan","balance"); voc.addWord(w);
+        w = new Word("prendre un numéro","to take a number"); voc.addWord(w);
+        w = new Word("une carte de crédit","credit card"); voc.addWord(w);
+        w = new Word("un emprunt","a loan"); voc.addWord(w);
+        w = new Word("retirer de l''argent","to take out money"); voc.addWord(w);
+        w = new Word("un compte d''épargne","savings account"); voc.addWord(w);
+        w = new Word("un distributeur automatique","ATM machine"); voc.addWord(w);
+        w = new Word("un reçu","receipt"); voc.addWord(w);
+        vocabularies.add(voc);
+
+        voc = new Vocabulary("Les meubles");
+        w = new Word("une table","a table"); voc.addWord(w);
+        w = new Word("une chaise","a chair"); voc.addWord(w);
+        w = new Word("une bibliothèque","a bookcase"); voc.addWord(w);
+        w = new Word("une table basse","a coffee table"); voc.addWord(w);
+        w = new Word("une cheminée","a fireplace"); voc.addWord(w);
+        w = new Word("une table de chevet","a bedside table"); voc.addWord(w);
+        w = new Word("une étagère","a shelf"); voc.addWord(w);
+        w = new Word("une armoire","a wardrobe"); voc.addWord(w);
+        w = new Word("une commode","a dresser"); voc.addWord(w);
+        w = new Word("une moquette","a carpet"); voc.addWord(w);
+        w = new Word("un siège","a seat"); voc.addWord(w);
+        w = new Word("un tabouret","a stool"); voc.addWord(w);
+        w = new Word("un placard","a cupboard"); voc.addWord(w);
+        w = new Word("un tiroir","a drawer"); voc.addWord(w);
+        w = new Word("un fauteuil","a armchair"); voc.addWord(w);
+        w = new Word("un lit","a bed"); voc.addWord(w);
+        w = new Word("un bureau","a desk"); voc.addWord(w);
+        w = new Word("un miroir","a mrror"); voc.addWord(w);
+        w = new Word("un meuble","a piece of furniture"); voc.addWord(w);
+        w = new Word("un oreiller","a pillow"); voc.addWord(w);
+        vocabularies.add(voc);
+
+        voc = new Vocabulary("Les couleurs");
+        w = new Word("blanc","white"); voc.addWord(w);
+        w = new Word("bleu clair","light blue"); voc.addWord(w);
+        w = new Word("multicolore","muli-colored"); voc.addWord(w);
+        w = new Word("gris","grey"); voc.addWord(w);
+        w = new Word("vert","green"); voc.addWord(w);
+        w = new Word("noir","black"); voc.addWord(w);
+        w = new Word("argenté","silver"); voc.addWord(w);
+        w = new Word("jaune","yellow"); voc.addWord(w);
+        w = new Word("orange","orange"); voc.addWord(w);
+        w = new Word("bleu","blue"); voc.addWord(w);
+        w = new Word("bleu foncé","dark blue"); voc.addWord(w);
+        w = new Word("rose","pink"); voc.addWord(w);
+        w = new Word("rouge","red"); voc.addWord(w);
+        w = new Word("marron","brown"); voc.addWord(w);
+        w = new Word("violet","purple"); voc.addWord(w);
+        w = new Word("beige","beige"); voc.addWord(w);
+        w = new Word("turquoise","turquoise"); voc.addWord(w);
+        w = new Word("doré","golden"); voc.addWord(w);
+        vocabularies.add(voc);
+
+        voc = new Vocabulary("La famille");
+        w = new Word("le père","the father"); voc.addWord(w);
+        w = new Word("les parents","the parents"); voc.addWord(w);
+        w = new Word("la sœur","the sister"); voc.addWord(w);
+        w = new Word("la fille","the daughter"); voc.addWord(w);
+        w = new Word("le bébé","the baby"); voc.addWord(w);
+        w = new Word("la femme","the wife"); voc.addWord(w);
+        w = new Word("la fiancée","the fiancée"); voc.addWord(w);
+        w = new Word("la grand-mère","the grandmother"); voc.addWord(w);
+        w = new Word("les petits-enfants","the grandchildren"); voc.addWord(w);
+        w = new Word("la tante","the aunt"); voc.addWord(w);
+        w = new Word("la nièce","the niece"); voc.addWord(w);
+        w = new Word("la belle-mère","the step mother"); voc.addWord(w);
+        w = new Word("la cousine","the cousin (female)"); voc.addWord(w);
+        w = new Word("la belle-sœur","sister in-law"); voc.addWord(w);
+        w = new Word("la mère","the mother"); voc.addWord(w);
+        w = new Word("le frère","the brother"); voc.addWord(w);
+        w = new Word("le fils","the son"); voc.addWord(w);
+        w = new Word("l’enfant","the child"); voc.addWord(w);
+        w = new Word("le mari","the husband"); voc.addWord(w);
+        w = new Word("le fiancé","the fiancé"); voc.addWord(w);
+        w = new Word("le grand-père","the grandfather"); voc.addWord(w);
+        w = new Word("les grand-parents","the grandparents"); voc.addWord(w);
+        w = new Word("l’oncle","the uncle"); voc.addWord(w);
+        w = new Word("le neveu","the nephew"); voc.addWord(w);
+        w = new Word("le beau-père","the step father"); voc.addWord(w);
+        w = new Word("le cousin","the cousin (male)"); voc.addWord(w);
+        w = new Word("le beau-frère","brother in-law"); voc.addWord(w);
+        w = new Word("le beau-père","father in-law"); voc.addWord(w);
+        vocabularies.add(voc);
     }
 }
