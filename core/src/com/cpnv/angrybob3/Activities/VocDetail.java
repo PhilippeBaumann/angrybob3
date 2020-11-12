@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import com.cpnv.angrybob3.AngryBob;
 import com.cpnv.angrybob3.Model.Data.Vocabulary;
-import com.cpnv.angrybob3.Model.Data.Word;
+import com.cpnv.angrybob3.Model.Data.SemanticWord;
 import com.cpnv.angrybob3.ui.Button;
 
 public class VocDetail extends BaseActivity implements InputProcessor {
@@ -76,7 +76,7 @@ public class VocDetail extends BaseActivity implements InputProcessor {
         titleFont.draw(batch, title, titlePositionX, TITLE_POSITION_Y);
         returnButton.draw(batch);
         float wordY = vocStartY + scrollOffset;
-        for (Word word : voc.getWords()) {
+        for (SemanticWord word : voc.getWords()) {
             if (0 <= wordY && wordY <= vocStartY) {
                 wordFont.draw(batch, word.getQuestion(), COLUMN1_X, wordY);
                 wordFont.draw(batch, word.getSolution(), COLUMN2_X, wordY);

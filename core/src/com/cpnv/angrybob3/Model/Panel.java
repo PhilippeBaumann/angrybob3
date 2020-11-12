@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import com.cpnv.angrybob3.Activities.Play;
+import com.cpnv.angrybob3.Model.Data.SemanticWord;
 import com.cpnv.angrybob3.Model.Data.Word;
 
 public class Panel extends Sprite {
@@ -24,9 +25,9 @@ public class Panel extends Sprite {
     private static final int FONT_SCALE = 2;
 
     private BitmapFont font;
-    private Word word;
+    private SemanticWord word;
 
-    public Panel(Word word) {
+    public Panel(SemanticWord word) {
         super(new Texture(PICTURE_NAME));
         setBounds(POSITION_X, POSITION_Y, WIDTH, HEIGHT);
         this.word = word;
@@ -41,7 +42,7 @@ public class Panel extends Sprite {
         font.draw(batch, word.getQuestion(), getX() + TEXT_OFFSET_X, getY() + TEXT_OFFSET_Y);
     }
 
-    public Word getWord() {
+    public SemanticWord getWord() {
         return word;
     }
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import com.cpnv.angrybob3.AngryBob;
 import com.cpnv.angrybob3.Activities.Play;
+import com.cpnv.angrybob3.Model.Data.SemanticWord;
 import com.cpnv.angrybob3.Model.Data.Word;
 
 public final class Scenery {
@@ -126,7 +127,7 @@ public final class Scenery {
      *
      * @return the word of one of the pigs
      */
-    public Word pickAWord() {
+    public SemanticWord pickAWord() {
         ArrayList<Pig> pigs = new ArrayList<Pig>();
         for (PhysicalObject pigCandidate : scene) {
             if (pigCandidate instanceof Pig) {

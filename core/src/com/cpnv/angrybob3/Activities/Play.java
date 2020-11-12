@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 
 import com.cpnv.angrybob3.AngryBob;
+import com.cpnv.angrybob3.Model.Data.SemanticWord;
 import com.cpnv.angrybob3.Model.RubberBand;
 import com.cpnv.angrybob3.Model.Scenery;
 import com.cpnv.angrybob3.Model.Bird;
@@ -24,7 +25,7 @@ import com.cpnv.angrybob3.Model.ScoreInfluencer;
 import com.cpnv.angrybob3.Model.Tnt;
 import com.cpnv.angrybob3.Model.Wasp;
 import com.cpnv.angrybob3.Model.Data.NoPickableWordException;
-import com.cpnv.angrybob3.Model.Data.Word;
+import com.cpnv.angrybob3.Model.Data.SemanticWord;
 import com.cpnv.angrybob3.ui.Button;
 
 public class Play extends BaseActivity implements InputProcessor {
@@ -132,7 +133,7 @@ public class Play extends BaseActivity implements InputProcessor {
         boolean firstPig = true;
         while (pigsLeft > 0) {
             try {
-                Word word;
+                SemanticWord word;
                 // The first pig will have a word that has never been found
                 // It will be the word of the question panel
                 if (firstPig) {

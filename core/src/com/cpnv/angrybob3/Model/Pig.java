@@ -3,6 +3,7 @@ package com.cpnv.angrybob3.Model;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
+import com.cpnv.angrybob3.Model.Data.SemanticWord;
 import com.cpnv.angrybob3.Model.Data.Word;
 
 public final class Pig extends TextualObject implements ScoreInfluencer {
@@ -15,9 +16,9 @@ public final class Pig extends TextualObject implements ScoreInfluencer {
 
     private Bubble bubble = null;
 
-    private Word word;
+    private SemanticWord word;
 
-    public Pig(Vector2 position, Word word) {
+    public Pig(Vector2 position, SemanticWord word) {
         super(position, WIDTH, HEIGHT, PICTURE_NAME, word.getSolution());
         this.word = word;
     }
@@ -30,7 +31,7 @@ public final class Pig extends TextualObject implements ScoreInfluencer {
         }
     }
 
-    public Word getWord() {
+    public SemanticWord getWord() {
         return word;
     }
 
