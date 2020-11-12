@@ -148,25 +148,13 @@ public class VocSelection extends BaseActivity implements InputProcessor {
         buttonFromES.draw(batch);
         buttonFromEN.draw(batch);
 
-        //randomVocFont.draw(batch, "Random", vocTextX, randomVocButton.getYTop() + textOffsetY);
+        //randomVocFont.draw(batch, "Random", vocTextX, buttonFromFR.getYTop() + textOffsetY);
 
         // Buttons Font
 
         //buttonFromFRFont.draw(batch, "Random", vocTextX, buttonFromFR.getYTop() + textOffsetY);
         //buttonFromESFont.draw(batch, "Random", vocTextX, buttonFromES.getYTop() + textOffsetY);
         //buttonFromENFont.draw(batch, "Random", vocTextX, buttonFromEN.getYTop() + textOffsetY);
-
-        for (HashMap.Entry<Button, Vocabulary> entry : vocSelectionButtons.entrySet()) {
-            Button button = entry.getKey();
-            button.draw(batch);
-
-            Vocabulary voc = entry.getValue();
-            vocabularyFont.draw(batch, voc.getName(), vocTextX, button.getYTop() + textOffsetY);
-        }
-        for (HashMap.Entry<Button, Vocabulary> entry : vocDetailButtons.entrySet()) {
-            Button button = entry.getKey();
-            button.draw(batch);
-        }
         batch.end();
     }
 
