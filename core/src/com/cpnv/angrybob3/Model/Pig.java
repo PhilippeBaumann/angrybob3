@@ -20,7 +20,7 @@ public final class Pig extends TextualObject implements ScoreInfluencer {
     private SemanticWord word;
 
     public Pig(Vector2 position, SemanticWord word) {
-        super(position, WIDTH, HEIGHT, PICTURE_NAME, word.getSolution(AngryBob.voc.getLanguageFrom()));
+        super(position, WIDTH, HEIGHT, PICTURE_NAME, word.getSolution(AngryBob.voc.getLanguageTo()));
         this.word = word;
     }
 

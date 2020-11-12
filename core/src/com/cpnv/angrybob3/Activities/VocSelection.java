@@ -148,7 +148,7 @@ public class VocSelection extends BaseActivity implements InputProcessor {
                 Vocabulary selectedVoc = entry.getValue();
                 AngryBob.popPage();
                 // TODO Wait till the second button is selected for the training language
-                AngryBob.start(/*languageButton.getValue()*/ "en" , "fr");
+                AngryBob.start(/*languageButton.getValue()*/ "fr" , "en");
             }
         }
         for (HashMap.Entry<Button, Vocabulary> entry : vocDetailButtons.entrySet()) {
