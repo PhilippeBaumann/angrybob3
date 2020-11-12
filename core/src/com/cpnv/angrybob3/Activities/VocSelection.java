@@ -34,7 +34,18 @@ public class VocSelection extends BaseActivity implements InputProcessor {
     // used to align the text with the buttons, using the center
     private float textOffsetY;
 
-    private Button randomVocButton;
+    // Button randomVocButton;
+
+    // Buttons FR , EN , ES
+
+    private Button buttonFromFR;
+    private Button buttonFromEN;
+    private Button buttonFromES;
+
+    private BitmapFont buttonFromFRFont;
+    private BitmapFont buttonFromESFont;
+    private BitmapFont buttonFromENFont;
+
     private HashMap<Button, Vocabulary> vocSelectionButtons;
     private HashMap<Button, Vocabulary> vocDetailButtons;
     private float vocDetailX;
@@ -68,12 +79,29 @@ public class VocSelection extends BaseActivity implements InputProcessor {
         randomVocFont.getData().setScale(LINE_SIZE);
 
         float buttonY = VOC_START_Y;
-        randomVocButton = new Button(
+
+        // Button FR, ES, EN
+
+        buttonFromFR = new Button(
                 new Vector2(VOC_POSITION_X, buttonY),
                 BUTTON_DIMENSION, BUTTON_DIMENSION,
-                "block.png",
-                "random"
+                "pig.png",
+                "fr"
         );
+        buttonFromES = new Button(
+                new Vector2(VOC_POSITION_X, buttonY - 100),
+                BUTTON_DIMENSION, BUTTON_DIMENSION,
+                "pig.png",
+                "es"
+        );
+        buttonFromEN = new Button(
+                new Vector2(VOC_POSITION_X, buttonY - 200),
+                BUTTON_DIMENSION, BUTTON_DIMENSION,
+                "pig.png",
+                "en"
+        );
+
+
         buttonY -= BUTTON_DIMENSION + VOC_MARGIN;
         vocSelectionButtons = new HashMap<>();
         vocDetailButtons = new HashMap<>();
@@ -113,8 +141,21 @@ public class VocSelection extends BaseActivity implements InputProcessor {
         batch.begin();
         titleFont.draw(batch, TITLE, titlePositionX, TITLE_POSITION_Y);
         titleFont.draw(batch, VOCTITLE, titlePositionX, TITLE_POSITION_Y - 200);
-        randomVocButton.draw(batch);
-        randomVocFont.draw(batch, "Random", vocTextX, randomVocButton.getYTop() + textOffsetY);
+
+        // Buttons Rendering
+
+        buttonFromFR.draw(batch);
+        buttonFromES.draw(batch);
+        buttonFromEN.draw(batch);
+
+        //randomVocFont.draw(batch, "Random", vocTextX, randomVocButton.getYTop() + textOffsetY);
+
+        // Buttons Font
+
+        //buttonFromFRFont.draw(batch, "Random", vocTextX, buttonFromFR.getYTop() + textOffsetY);
+        //buttonFromESFont.draw(batch, "Random", vocTextX, buttonFromES.getYTop() + textOffsetY);
+        //buttonFromENFont.draw(batch, "Random", vocTextX, buttonFromEN.getYTop() + textOffsetY);
+
         for (HashMap.Entry<Button, Vocabulary> entry : vocSelectionButtons.entrySet()) {
             Button button = entry.getKey();
             button.draw(batch);
@@ -133,10 +174,19 @@ public class VocSelection extends BaseActivity implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 touchPoint = convertCoordinates(screenX, screenY);
 
-        // TODO Remove
-        if (randomVocButton.isTouched(touchPoint)) {
-            //AngryBob.popPage();
-            //AngryBob.start();
+        if (buttonFromFR.isTouched(touchPoint)) {
+            AngryBob.popPage();
+            AngryBob.start(buttonFromES.getValue() , "en");
+        }
+
+        if (buttonFromEN.isTouched(touchPoint)) {
+            AngryBob.popPage();
+            AngryBob.start(buttonFromES.getValue() , "en");
+        }
+
+        if (buttonFromES.isTouched(touchPoint)) {
+            AngryBob.popPage();
+            AngryBob.start(buttonFromES.getValue() , "en");
         }
 
         // Modify to get buttons for each language
